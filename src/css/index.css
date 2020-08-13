@@ -1,0 +1,15 @@
+.page-class{
+    background-color: ghostwhite;
+    align-content: center;
+}
+
+body{
+  background-color: ghostwhite;
+}
+
+
+  .board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+  }
