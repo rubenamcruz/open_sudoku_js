@@ -71,3 +71,7 @@
 .square_bottom_outer_bold{
   border-bottom: 3px solid #000;
 }
+
+.selected{
+  background-color: palegoldenrod;
+}

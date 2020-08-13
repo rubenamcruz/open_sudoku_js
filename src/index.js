@@ -2,58 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import './css/squares.css';
-
-
-
-class Square extends React.Component{
-    render() {
-        return (
-        <button className={this.getClassValue()} onClick={() => this.props.onClick()}>
-            {this.props.value}
-        </button>
-        )
-    }
-
-
-    getClassValue(){
-        let value = "square ";
-        
-        if(this.props.line === 1){
-            value += "square_top_outer_bold ";
-        }else if(this.props.line%3 === 1){
-            value += "square_top_bold ";
-        }else{
-            value += "square_top_border ";
-        }
-
-        if(this.props.line === 9){
-            value += "square_bottom_outer_bold ";
-        } else if(this.props.line%3 === 0){
-            value += "square_bottom_bold ";
-        } else{
-            value += "square_bottom_border ";
-        }
-
-        if(this.props.column === 1){
-            value += "square_left_outer_bold ";
-        } else if(this.props.column%3 === 1){
-            value += "square_left_bold ";
-        } else{
-            value += "square_left_border ";
-        }
-
-        if(this.props.column === 9){
-            value += "square_right_outer_bold ";
-        } else if(this.props.column%3 === 0){
-            value += "square_right_bold ";
-        } else{
-            value += "square_right_border ";
-        }
-
-        return value;
-
-    }
-}
+import Square from './squares/square.js';
 
 
 class Board extends React.Component{
@@ -72,8 +21,10 @@ class Board extends React.Component{
       }
 
     renderSquare(line, column, value){
+        let selected = this.state.selected.line === line-1 && this.state.selected.column === column-1; 
         return(
         <Square line={line} column={column} value={value} 
+            selected = {selected}
             onClick={() => this.doTheThing(line-1, column-1)}/>
         )
     }
