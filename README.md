@@ -1,11 +1,14 @@
 # openSudokuJS
 
-Frontend App for my open sudoku project
+Frontend App for my open sudoku project.
 
-### `npm start`
+The objective is to create a web page where we can list and play sudoku.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## How to Execute
+
+This project is built using node 12.18.2 and npm 6.14.6
+
+To execute we simply must open a console and type `npm start`
+
+Open [http://localhost:3000](http://localhost:3000) to view the home page
