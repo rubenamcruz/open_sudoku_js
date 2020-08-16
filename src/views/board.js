@@ -1,27 +1,38 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Square from '../squares/square.js';
 
 class Board extends React.Component{
 
     constructor(props) {
         super(props);
-        let squares = Array(9).fill(null);
-        for(let i = 0; i < 9; i++){
-            squares[i] = Array(9).fill(null);
+        let squares = null;
+        let locked = null;
+        if(this.props.puzzle != null){
+            squares = this.props.puzzle;
+            locked = this.props.puzzle.map(x => x.map(y => y != null));
+        } else{
+            squares = Array(9).fill(null);
+            locked = Array(9).fill(null);
+            for(let i = 0; i < 9; i++){
+                squares[i] = Array(9).fill(null);
+                locked[i] = Array(9).fill(false);
+            }
         }
-
+        console.log(locked);
         this.state = {
           squares: squares,
+          locked: locked,
           selected: {line: null, column: null}
         };
       }
 
     renderSquare(line, column, value){
         let selected = this.state.selected.line === line-1 && this.state.selected.column === column-1; 
+        let locked = this.state.locked[line-1][column-1];
         return(
         <Square line={line} column={column} value={value} 
             selected = {selected}
+            locked = {locked}
             onClick={() => this.doTheThing(line-1, column-1)}/>
         )
     }
@@ -48,13 +59,15 @@ class Board extends React.Component{
 
 
     fillTheValues(key){
-        let squares = this.state.squares.slice();
-        if(key === 'Delete'){
-            squares[this.state.selected.line][this.state.selected.column] = null;
-        }else if(key >= '0' && key <= '9'){
-            squares[this.state.selected.line][this.state.selected.column] = Number(key);
+        if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
+            let squares = this.state.squares.slice();
+            if(key === 'Delete'){
+                squares[this.state.selected.line][this.state.selected.column] = null;
+            }else if(key >= '0' && key <= '9'){
+                squares[this.state.selected.line][this.state.selected.column] = Number(key);
+            }
+            this.setState({squares: squares});
         }
-        this.setState({squares: squares});
     }
 
     render(){

@@ -17,6 +17,9 @@ class Square extends React.Component{
         if(this.props.selected){
             value += "selected ";
         }
+        if(!this.props.locked){
+            value += "not_locked ";
+        }
         
         if(this.props.line === 1){
             value += "square_top_outer_bold ";

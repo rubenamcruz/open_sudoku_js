@@ -75,3 +75,7 @@
 .selected{
   background-color: palegoldenrod;
 }
+
+.not_locked{
+  color: blue;
+}
