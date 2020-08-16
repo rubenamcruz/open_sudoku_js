@@ -18,7 +18,6 @@ class Board extends React.Component{
                 locked[i] = Array(9).fill(false);
             }
         }
-        console.log(locked);
         this.state = {
           squares: squares,
           locked: locked,
@@ -29,15 +28,17 @@ class Board extends React.Component{
     renderSquare(line, column, value){
         let selected = this.state.selected.line === line-1 && this.state.selected.column === column-1; 
         let locked = this.state.locked[line-1][column-1];
+        let centerValues = line == 1 && column == 1 ? [1, 2, 3, 4, ] : [];
         return(
         <Square line={line} column={column} value={value} 
             selected = {selected}
             locked = {locked}
-            onClick={() => this.doTheThing(line-1, column-1)}/>
+            centerValues = {centerValues}
+            onClick={() => this.changeSelectedTile(line-1, column-1)}/>
         )
     }
 
-    doTheThing(line, column){
+    changeSelectedTile(line, column){
         this.setState({selected: {line: line, column: column}});
     }
 

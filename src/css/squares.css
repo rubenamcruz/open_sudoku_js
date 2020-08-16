@@ -13,6 +13,19 @@
     width: 59px;
 }
 
+.center_square {
+  float: left;
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 59px;
+  height: 59px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 1px;
+  text-align: center;
+  width: 59px;
+}
+
 .square_left_border{
     border-left: 1px solid #000;
 }
@@ -77,5 +90,5 @@
 }
 
 .not_locked{
-  color: blue;
+  color: mediumblue;
 }

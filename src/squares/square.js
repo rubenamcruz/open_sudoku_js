@@ -1,17 +1,45 @@
 import React from 'react';
-
+import CenterSquare from './centerSquare.js';
+import SideSquare from './sideSquare.js';
 
 class Square extends React.Component{
     render() {
+        if(this.props.value != null){
+            return this.renderNumberedSquare();
+        }else{
+            return this.generateMiniSquares();
+        }
+    }
+
+    renderNumberedSquare(){
         return (
-        <button className={this.getClassValue()} onClick={() => this.props.onClick()}>
-            {this.props.value}
-        </button>
+            <div className={this.getClassValue(this.props.color)} onClick={() => this.props.onClick()}>
+                {this.props.value}
+            </div>
         )
     }
 
+    generateMiniSquares(){
+        return (
+            <div className={this.getClassValue(this.props.color)} onClick={() => this.props.onClick()}>
+                {this.renderCenterSquare()}
+            </div>
+          )
+    }
 
-    getClassValue(){
+    renderCenterSquare(){
+        return(
+            <CenterSquare values={this.props.centerValues} /> 
+        )
+    }
+
+    renderSideSquare(){
+        return(
+            <SideSquare/> 
+        )
+    }
+
+    getClassValue(backgroundColor){
         let value = "square ";
 
         if(this.props.selected){
