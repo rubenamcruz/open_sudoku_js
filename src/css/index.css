@@ -1,6 +1,7 @@
 .page-class{
     background-color: ghostwhite;
     align-content: center;
+
 }
 
 body{
@@ -12,4 +13,34 @@ body{
     clear: both;
     content: "";
     display: table;
+  }
+
+  button:focus {outline:0;}
+
+  div:focus {outline:0;}
+
+  .button-unselected {
+    width: 100px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+
+  .button-unselected {
+    width: 100px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  
+
+  .button-selected {
+    width: 100px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: powderblue;
   }

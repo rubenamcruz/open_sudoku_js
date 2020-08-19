@@ -3,19 +3,24 @@ import React from 'react';
 
 class CenterSquare extends React.Component{
     render() {
-        let result_numbers = "";
-        let input_numbers = this.props.values;
-        if(input_numbers != null){
-            for(let i = 0; i < input_numbers.length; i++){
-                result_numbers += input_numbers[i];
-            }
-        }
         return (
             <div className="center_square" >
-                {result_numbers}
+                {this.centerNumberString()}
             </div>
         )
     }
+
+    centerNumberString(){
+        let input_numbers = this.props.values;
+        let result_numbers = "";
+        for(let i = 1; i <=9; i++){
+            if(input_numbers[i]){
+                result_numbers += i;
+            }
+        }
+        return result_numbers;
+    }
+
 }
 
 export default CenterSquare;

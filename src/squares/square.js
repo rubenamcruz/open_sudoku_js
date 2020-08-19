@@ -19,25 +19,14 @@ class Square extends React.Component{
         )
     }
 
-    generateMiniSquares(){
+    generateCenterSquare(){
         return (
             <div className={this.getClassValue(this.props.color)} onClick={() => this.props.onClick()}>
-                {this.renderCenterSquare()}
+                <CenterSquare values={this.props.centerValues} /> 
             </div>
           )
     }
 
-    renderCenterSquare(){
-        return(
-            <CenterSquare values={this.props.centerValues} /> 
-        )
-    }
-
-    renderSideSquare(){
-        return(
-            <SideSquare/> 
-        )
-    }
 
     getClassValue(backgroundColor){
         let value = "square ";
