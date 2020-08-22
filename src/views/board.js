@@ -1,5 +1,8 @@
 import React from 'react';
 import Square from '../squares/square.js';
+import global_verifier from '../utils/sudoku_verifier';
+import {column_rule, line_rule, square_rule} from '../utils/rules/basic_rules';
+
 
 class Board extends React.Component{
 
@@ -151,6 +154,14 @@ class Board extends React.Component{
                         }}>
                     corner
                 </button>
+
+                <button className="button-unselected" onClick={() => 
+                        {
+                            let result = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
+                            console.log(result);
+                        }}>
+                    check
+                </button>
             </div>
             </div>
         )
@@ -164,6 +175,11 @@ class Board extends React.Component{
             return this.state.corner ? "button-selected" : "button-unselected";
         }
     }
+
+
+
 }
+
+
 
 export default Board;
