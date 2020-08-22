@@ -1,13 +1,13 @@
 import React from 'react';
 import CenterSquare from './centerSquare.js';
-import SideSquare from './sideSquare.js';
+import CornerSquare from './cornerSquare.js';
 
 class Square extends React.Component{
     render() {
         if(this.props.value != null){
             return this.renderNumberedSquare();
         }else{
-            return this.generateMiniSquares();
+            return this.generateMicroSquares();
         }
     }
 
@@ -19,10 +19,22 @@ class Square extends React.Component{
         )
     }
 
-    generateCenterSquare(){
+    generateMicroSquares(){
+        let centerSquare = <CenterSquare values={this.props.centerValues} />;
+        let cornerSquares = [];
+        if(this.props.cornerValues){
+            let key = 1;
+            for(let i = 1; i <= 9; i++){
+                if(this.props.cornerValues[i]){
+                    cornerSquares.push(<CornerSquare key={i} order={key++} value={i}/>);
+                }
+            }
+        }
+
         return (
-            <div className={this.getClassValue(this.props.color)} onClick={() => this.props.onClick()}>
-                <CenterSquare values={this.props.centerValues} /> 
+            <div className={this.getClassValue(this.props.color)} onClick={() => this.props.onClick()} style={{position:"relative"}} >
+                {centerSquare}
+                {cornerSquares}
             </div>
           )
     }

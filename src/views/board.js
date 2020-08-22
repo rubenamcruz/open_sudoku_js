@@ -8,18 +8,22 @@ class Board extends React.Component{
         let squares = null;
         let locked = null;
         let center_values = null;
+        let corner_values = null;
         if(this.props.puzzle != null){
             squares = this.props.puzzle;
             locked = this.props.puzzle.map(x => x.map(y => y != null));
-            center_values = this.props.puzzle.map(x => x.map(y => this.emptyCenterValues()));
+            center_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
+            corner_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
         } else{
             squares = Array(9).fill(null);
             locked = Array(9).fill(null);
             center_values = Array(9).fill(null);
+            corner_values = Array(9).fill(null);
             for(let i = 0; i < 9; i++){
                 squares[i] = Array(9).fill(null);
                 locked[i] = Array(9).fill(false);
-                center_values[i] = Array(9).fill(this.emptyCenterValues());
+                center_values[i] = Array(9).fill(this.emptyValues());
+                corner_values[i] = Array(9).fill(this.emptyValues());
             }
         }
         this.state = {
@@ -27,6 +31,7 @@ class Board extends React.Component{
           locked: locked,
           selected: {line: null, column: null},
           center_values: center_values,
+          corner_values: corner_values,
           center: false
         };
       }
@@ -35,16 +40,18 @@ class Board extends React.Component{
         let selected = this.state.selected.line === line-1 && this.state.selected.column === column-1; 
         let locked = this.state.locked[line-1][column-1];
         let centerValues = this.state.center_values[line-1][column-1];
+        let cornerValues = this.state.corner_values[line-1][column-1];
         return(
         <Square line={line} column={column} value={value} 
             selected = {selected}
             locked = {locked}
             centerValues = {centerValues}
+            cornerValues = {cornerValues}
             onClick={() => this.changeSelectedTile(line-1, column-1)}/>
         )
     }
 
-    emptyCenterValues(){
+    emptyValues(){
         return {1:false, 2:false, 3:false, 4:false, 5:false, 6:false, 7:false, 8:false, 9:false};
     }
 
@@ -70,7 +77,6 @@ class Board extends React.Component{
 
 
     fillTheValues(key){
-        console.log("hello");
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let squares = this.state.squares.slice();
             if(key === 'Delete'){
@@ -86,7 +92,7 @@ class Board extends React.Component{
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let center_values = this.state.center_values.slice();
             if(key === 'Delete'){
-                center_values[this.state.selected.line][this.state.selected.column] = this.emptyCenterValues();
+                center_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
             }else if(key >= '0' && key <= '9'){
                 center_values[this.state.selected.line][this.state.selected.column][Number(key)] = !center_values[this.state.selected.line][this.state.selected.column][Number(key)];
             }
@@ -94,9 +100,24 @@ class Board extends React.Component{
         }
     }
 
+    updateCorner(key){
+        if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
+            let corner_values = this.state.corner_values.slice();
+            if(key === 'Delete'){
+                corner_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
+            }else if(key >= '0' && key <= '9'){
+                corner_values[this.state.selected.line][this.state.selected.column][Number(key)] = !corner_values[this.state.selected.line][this.state.selected.column][Number(key)];
+            }
+            this.setState({corner_values: corner_values});
+        }
+    }
+
     chooseAction(event){
         if(this.state.center){
             this.updateCenter(event.key);
+        }
+        else if(this.state.corner){
+            this.updateCorner(event.key);
         }
         else{
             this.fillTheValues(event.key)
@@ -119,16 +140,29 @@ class Board extends React.Component{
             </div>
             <br/>
             <div>
-                <button className={this.getButtonClass()} onClick={() => this.setState({center: !this.state.center})}>
+                <button className={this.getButtonClass("center")} onClick={() => {this.setState({corner: false}); this.setState({center: !this.state.center})}}>
                     center
+                </button>
+
+                <button className={this.getButtonClass("corner")} onClick={() => 
+                        {
+                            this.setState({center: false});
+                            this.setState({corner: !this.state.corner})
+                        }}>
+                    corner
                 </button>
             </div>
             </div>
         )
     }
 
-    getButtonClass(){
-        return this.state.center ? "button-selected" : "button-unselected";
+    getButtonClass(button_type){
+        if(button_type === "center"){
+            return this.state.center ? "button-selected" : "button-unselected";
+        }
+        if(button_type === "corner"){
+            return this.state.corner ? "button-selected" : "button-unselected";
+        }
     }
 }
 
