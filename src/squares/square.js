@@ -43,9 +43,15 @@ class Square extends React.Component{
     getClassValue(backgroundColor){
         let value = "square ";
 
-        if(this.props.selected){
+
+
+        if(this.props.conflicts){
+            value += "conflict ";
+        }
+        else if(this.props.selected){
             value += "selected ";
         }
+        
         if(!this.props.locked){
             value += "not_locked ";
         }

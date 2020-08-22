@@ -104,6 +104,10 @@
   background-color: palegoldenrod;
 }
 
+.conflict{
+  background-color: indianred;
+}
+
 .not_locked{
   color: mediumblue;
 }

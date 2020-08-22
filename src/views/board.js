@@ -12,9 +12,11 @@ class Board extends React.Component{
         let locked = null;
         let center_values = null;
         let corner_values = null;
+        let conflicts = null;
         if(this.props.puzzle != null){
             squares = this.props.puzzle;
             locked = this.props.puzzle.map(x => x.map(y => y != null));
+            conflicts = this.props.puzzle.map(x => x.map(y => false));
             center_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
             corner_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
         } else{
@@ -22,9 +24,11 @@ class Board extends React.Component{
             locked = Array(9).fill(null);
             center_values = Array(9).fill(null);
             corner_values = Array(9).fill(null);
+            conflicts = Array(9).fill(null);
             for(let i = 0; i < 9; i++){
                 squares[i] = Array(9).fill(null);
                 locked[i] = Array(9).fill(false);
+                conflicts[i] = Array(9).fill(false);
                 center_values[i] = Array(9).fill(this.emptyValues());
                 corner_values[i] = Array(9).fill(this.emptyValues());
             }
@@ -35,6 +39,7 @@ class Board extends React.Component{
           selected: {line: null, column: null},
           center_values: center_values,
           corner_values: corner_values,
+          conflicts: conflicts,
           center: false
         };
       }
@@ -44,18 +49,28 @@ class Board extends React.Component{
         let locked = this.state.locked[line-1][column-1];
         let centerValues = this.state.center_values[line-1][column-1];
         let cornerValues = this.state.corner_values[line-1][column-1];
+        let conflicts = this.state.conflicts[line-1][column-1];
         return(
         <Square line={line} column={column} value={value} 
             selected = {selected}
             locked = {locked}
             centerValues = {centerValues}
             cornerValues = {cornerValues}
+            conflicts = {conflicts}
             onClick={() => this.changeSelectedTile(line-1, column-1)}/>
         )
     }
 
     emptyValues(){
         return {1:false, 2:false, 3:false, 4:false, 5:false, 6:false, 7:false, 8:false, 9:false};
+    }
+
+    emptyBooleanGrid(){
+        let value = Array(9).fill(null);
+        for(let i=0; i < 9; i++){
+            value[i] = Array(9).fill(false);
+        }
+        return value;
     }
 
     changeSelectedTile(line, column){
@@ -143,6 +158,7 @@ class Board extends React.Component{
             </div>
             <br/>
             <div>
+                <div style={{float:"left"}}>
                 <button className={this.getButtonClass("center")} onClick={() => {this.setState({corner: false}); this.setState({center: !this.state.center})}}>
                     center
                 </button>
@@ -154,14 +170,31 @@ class Board extends React.Component{
                         }}>
                     corner
                 </button>
-
-                <button className="button-unselected" onClick={() => 
+                </div>
+                        <div style={{float:"left"}}>
+                <button className="button-unselected small" onClick={() => 
                         {
-                            let result = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
-                            console.log(result);
-                        }}>
+                            let results = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
+                            if(results.length === 0){
+                                alert("Sound all right!");
+                            }else{
+                                let conflicts = this.emptyBooleanGrid();
+                                for(let result of results){
+                                    conflicts[result.line][result.column] = true;
+                                }
+                                this.setState({conflicts: conflicts});
+                                alert("There are conflicts");
+                            }
+                        }} title="Check if solution is valid">
                     check
                 </button>
+                <div>
+                <button className="button-unselected small" onClick={() => this.setState({conflicts: this.emptyBooleanGrid()}) }
+                        title="Clear conflict annotation">
+                    clear
+                </button>
+                </div>
+                </div>
             </div>
             </div>
         )
