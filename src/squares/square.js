@@ -56,33 +56,33 @@ class Square extends React.Component{
             value += "not_locked ";
         }
         
-        if(this.props.line === 1){
+        if(this.props.line === 0){
             value += "square_top_outer_bold ";
-        }else if(this.props.line%3 === 1){
+        }else if(this.props.line%3 === 0){
             value += "square_top_bold ";
         }else{
             value += "square_top_border ";
         }
 
-        if(this.props.line === 9){
+        if(this.props.line === 8){
             value += "square_bottom_outer_bold ";
-        } else if(this.props.line%3 === 0){
+        } else if(this.props.line%3 === 2){
             value += "square_bottom_bold ";
         } else{
             value += "square_bottom_border ";
         }
 
-        if(this.props.column === 1){
+        if(this.props.column === 0){
             value += "square_left_outer_bold ";
-        } else if(this.props.column%3 === 1){
+        } else if(this.props.column%3 === 0){
             value += "square_left_bold ";
         } else{
             value += "square_left_border ";
         }
 
-        if(this.props.column === 9){
+        if(this.props.column === 8){
             value += "square_right_outer_bold ";
-        } else if(this.props.column%3 === 0){
+        } else if(this.props.column%3 === 2){
             value += "square_right_bold ";
         } else{
             value += "square_right_border ";

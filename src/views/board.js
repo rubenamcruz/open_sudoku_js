@@ -44,12 +44,13 @@ class Board extends React.Component{
         };
       }
 
-    renderSquare(line, column, value){
-        let selected = this.state.selected.line === line-1 && this.state.selected.column === column-1; 
-        let locked = this.state.locked[line-1][column-1];
-        let centerValues = this.state.center_values[line-1][column-1];
-        let cornerValues = this.state.corner_values[line-1][column-1];
-        let conflicts = this.state.conflicts[line-1][column-1];
+    renderSquare(line, column){
+        let value = this.state.squares[line][column];
+        let selected = this.state.selected.line === line && this.state.selected.column === column; 
+        let locked = this.state.locked[line][column];
+        let centerValues = this.state.center_values[line][column];
+        let cornerValues = this.state.corner_values[line][column];
+        let conflicts = this.state.conflicts[line][column];
         return(
         <Square line={line} column={column} value={value} 
             selected = {selected}
@@ -57,7 +58,7 @@ class Board extends React.Component{
             centerValues = {centerValues}
             cornerValues = {cornerValues}
             conflicts = {conflicts}
-            onClick={() => this.changeSelectedTile(line-1, column-1)}/>
+            onClick={() => this.changeSelectedTile(line, column)}/>
         )
     }
 
@@ -80,15 +81,15 @@ class Board extends React.Component{
     renderLine(line_number){
         return (
           <div className="board-row">
-            {this.renderSquare(line_number, 1, this.state.squares[line_number-1][0])}
-            {this.renderSquare(line_number, 2, this.state.squares[line_number-1][1])}
-            {this.renderSquare(line_number, 3, this.state.squares[line_number-1][2])}
-            {this.renderSquare(line_number, 4, this.state.squares[line_number-1][3])}
-            {this.renderSquare(line_number, 5, this.state.squares[line_number-1][4])}
-            {this.renderSquare(line_number, 6, this.state.squares[line_number-1][5])}
-            {this.renderSquare(line_number, 7, this.state.squares[line_number-1][6])}
-            {this.renderSquare(line_number, 8, this.state.squares[line_number-1][7])}
-            {this.renderSquare(line_number, 9, this.state.squares[line_number-1][8])}
+            {this.renderSquare(line_number, 0)}
+            {this.renderSquare(line_number, 1)}
+            {this.renderSquare(line_number, 2)}
+            {this.renderSquare(line_number, 3)}
+            {this.renderSquare(line_number, 4)}
+            {this.renderSquare(line_number, 5)}
+            {this.renderSquare(line_number, 6)}
+            {this.renderSquare(line_number, 7)}
+            {this.renderSquare(line_number, 8)}
         </div>
         )
     }
@@ -146,6 +147,7 @@ class Board extends React.Component{
         return (
             <div tabIndex={0} onKeyPress={(event) => {this.chooseAction(event)}}>
             <div>
+               {this.renderLine(0)}
                {this.renderLine(1)}
                {this.renderLine(2)}
                {this.renderLine(3)}
@@ -154,7 +156,6 @@ class Board extends React.Component{
                {this.renderLine(6)}
                {this.renderLine(7)}
                {this.renderLine(8)}
-               {this.renderLine(9)}
             </div>
             <br/>
             <div>
