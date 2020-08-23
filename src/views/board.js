@@ -98,9 +98,7 @@ class Board extends React.Component{
     fillTheValues(key){
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let squares = this.state.squares.slice();
-            if(key === 'Delete'){
-                squares[this.state.selected.line][this.state.selected.column] = null;
-            }else if(key >= '0' && key <= '9'){
+            if(key >= '0' && key <= '9'){
                 squares[this.state.selected.line][this.state.selected.column] = Number(key);
             }
             this.setState({squares: squares});
@@ -110,9 +108,7 @@ class Board extends React.Component{
     updateCenter(key){
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let center_values = this.state.center_values.slice();
-            if(key === 'Delete'){
-                center_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
-            }else if(key >= '0' && key <= '9'){
+            if(key >= '0' && key <= '9'){
                 center_values[this.state.selected.line][this.state.selected.column][Number(key)] = !center_values[this.state.selected.line][this.state.selected.column][Number(key)];
             }
             this.setState({center_values: center_values});
@@ -122,30 +118,50 @@ class Board extends React.Component{
     updateCorner(key){
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let corner_values = this.state.corner_values.slice();
-            if(key === 'Delete'){
-                corner_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
-            }else if(key >= '0' && key <= '9'){
+            if(key >= '0' && key <= '9'){
                 corner_values[this.state.selected.line][this.state.selected.column][Number(key)] = !corner_values[this.state.selected.line][this.state.selected.column][Number(key)];
             }
             this.setState({corner_values: corner_values});
         }
     }
 
-    chooseAction(event){
-        if(this.state.center){
-            this.updateCenter(event.key);
+    deleteValueOrAnnotations(){
+        if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
+            if(this.state.squares[this.state.selected.line][this.state.selected.column]){
+                let squares= this.state.squares.slice();
+                squares[this.state.selected.line][this.state.selected.column] = null;
+                this.setState({squares: squares});
+            }else{
+                let corner_values = this.state.corner_values.slice();
+                let center_values = this.state.center_values.slice();
+                corner_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
+                center_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
+                this.setState({corner_values: corner_values});
+                this.setState({center_values: center_values});
+            }
+        }
+    }
+
+
+    chooseAction(key){
+
+        if(key === 'Delete'){
+            this.deleteValueOrAnnotations();
+        }
+        else if(this.state.center){
+            this.updateCenter(key);
         }
         else if(this.state.corner){
-            this.updateCorner(event.key);
+            this.updateCorner(key);
         }
         else{
-            this.fillTheValues(event.key)
+            this.fillTheValues(key)
         }
     }
 
     render(){
         return (
-            <div tabIndex={0} onKeyPress={(event) => {this.chooseAction(event)}}>
+            <div tabIndex={0} onKeyPress={(event) => {this.chooseAction(event.key)}}>
             <div>
                {this.renderLine(0)}
                {this.renderLine(1)}
