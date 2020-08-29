@@ -21,16 +21,7 @@ class Square extends React.Component{
 
     generateMicroSquares(){
         let centerSquare = <CenterSquare values={this.props.centerValues} />;
-        let cornerSquares = [];
-        if(this.props.cornerValues){
-            let key = 1;
-            for(let i = 1; i <= 9; i++){
-                if(this.props.cornerValues[i]){
-                    cornerSquares.push(<CornerSquare key={i} order={key++} value={i}/>);
-                }
-            }
-        }
-
+        let cornerSquares = <CornerSquare values = {this.props.cornerValues} />;
         return (
             <div className={this.getClassValue(this.props.color)} onClick={() => this.props.onClick()} style={{position:"relative"}} >
                 {centerSquare}
