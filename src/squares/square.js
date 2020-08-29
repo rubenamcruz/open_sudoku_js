@@ -7,7 +7,7 @@ class Square extends React.Component{
         if(this.props.value != null){
             return this.renderNumberedSquare();
         }else{
-            return this.generateMicroSquares();
+            return this.renderAnnotationNumberSquares();
         }
     }
 
@@ -19,13 +19,11 @@ class Square extends React.Component{
         )
     }
 
-    generateMicroSquares(){
-        let centerSquare = <CenterSquare values={this.props.centerValues} />;
-        let cornerSquares = <CornerSquare values = {this.props.cornerValues} />;
+    renderAnnotationNumberSquares(){
         return (
             <div className={this.getClassValue(this.props.color)} onClick={() => this.props.onClick()} style={{position:"relative"}} >
-                {centerSquare}
-                {cornerSquares}
+                <CenterSquare values={this.props.centerValues} />
+                <CornerSquare values = {this.props.cornerValues} />
             </div>
           )
     }
@@ -33,8 +31,6 @@ class Square extends React.Component{
 
     getClassValue(backgroundColor){
         let value = "square ";
-
-
 
         if(this.props.conflicts){
             value += "conflict ";
