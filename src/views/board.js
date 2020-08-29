@@ -2,7 +2,7 @@ import React from 'react';
 import Square from '../squares/square.js';
 import global_verifier from '../utils/sudoku_verifier';
 import {column_rule, line_rule, square_rule} from '../utils/rules/basic_rules';
-
+import {annotationType, annotationText} from '../utils/annotations';
 
 class Board extends React.Component{
 
@@ -40,9 +40,10 @@ class Board extends React.Component{
           center_values: center_values,
           corner_values: corner_values,
           conflicts: conflicts,
-          center: false
+          button_annotation: annotationType.NONE,
+          key_annotation: annotationType.NONE
         };
-      }
+    }
 
     renderSquare(line, column){
         let value = this.state.squares[line][column];
@@ -148,10 +149,12 @@ class Board extends React.Component{
         if(key === 'Delete'){
             this.deleteValueOrAnnotations();
         }
-        else if(this.state.center){
+        else if((this.state.button_annotation === annotationType.CENTER  && this.state.key_annotation === annotationType.NONE )||
+                    this.state.key_annotation === annotationType.CENTER){
             this.updateCenter(key);
         }
-        else if(this.state.corner){
+        else if((this.state.button_annotation === annotationType.CORNER  && this.state.key_annotation === annotationType.NONE )||
+            this.state.key_annotation === annotationType.CORNER){
             this.updateCorner(key);
         }
         else{
@@ -176,15 +179,11 @@ class Board extends React.Component{
             <br/>
             <div>
                 <div style={{float:"left"}}>
-                <button className={this.getButtonClass("center")} onClick={() => {this.setState({corner: false}); this.setState({center: !this.state.center})}}>
+                <button className={this.getButtonClass("center")} onClick={() => this.setButtonAnnotation(annotationType.CENTER) }>
                     center
                 </button>
 
-                <button className={this.getButtonClass("corner")} onClick={() => 
-                        {
-                            this.setState({center: false});
-                            this.setState({corner: !this.state.corner})
-                        }}>
+                <button className={this.getButtonClass("corner")} onClick={() =>  this.setButtonAnnotation(annotationType.CORNER)}>
                     corner
                 </button>
                 </div>
@@ -218,14 +217,20 @@ class Board extends React.Component{
     }
 
     getButtonClass(button_type){
-        if(button_type === "center"){
-            return this.state.center ? "button-selected" : "button-unselected";
+        if((this.state.key_annotation === annotationType.NONE && annotationText[this.state.button_annotation] === button_type) ||
+            annotationText[this.state.key_annotation] === button_type){
+            return "button-selected" 
         }
-        if(button_type === "corner"){
-            return this.state.corner ? "button-selected" : "button-unselected";
-        }
+        return "button-unselected";
     }
 
+    setButtonAnnotation(newAnnotationType){
+        if(this.state.button_annotation === newAnnotationType){
+            this.setState({button_annotation: annotationType.NONE});
+        }else{
+            this.setState({button_annotation: newAnnotationType});
+        }
+    }
 
 
 }
