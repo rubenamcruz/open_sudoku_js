@@ -99,7 +99,7 @@ class Board extends React.Component{
     fillTheValues(key){
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let squares = this.state.squares.slice();
-            if(key >= '0' && key <= '9'){
+            if(key >= 1 && key <= 9){
                 squares[this.state.selected.line][this.state.selected.column] = Number(key);
             }
             this.setState({squares: squares});
@@ -109,7 +109,7 @@ class Board extends React.Component{
     updateCenter(key){
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let center_values = this.state.center_values.slice();
-            if(key >= '0' && key <= '9'){
+            if(key >= 1 && key <= 9){
                 center_values[this.state.selected.line][this.state.selected.column][Number(key)] = !center_values[this.state.selected.line][this.state.selected.column][Number(key)];
             }
             this.setState({center_values: center_values});
@@ -119,7 +119,7 @@ class Board extends React.Component{
     updateCorner(key){
         if(!this.state.locked[this.state.selected.line][this.state.selected.column]){
             let corner_values = this.state.corner_values.slice();
-            if(key >= '0' && key <= '9'){
+            if(key >= 1 && key <= 9){
                 corner_values[this.state.selected.line][this.state.selected.column][Number(key)] = !corner_values[this.state.selected.line][this.state.selected.column][Number(key)];
             }
             this.setState({corner_values: corner_values});
@@ -144,27 +144,41 @@ class Board extends React.Component{
     }
 
 
-    chooseAction(key){
+    chooseAction(event){
+        if(event.ctrlKey){
+            this.setState({key_annotation: annotationType.CENTER});
+        }
+        else if(event.shiftKey){
+            this.setState({key_annotation: annotationType.CORNER});
+        }
 
-        if(key === 'Delete'){
+        let number = event.keyCode - 48;
+        if(event.key === 'Delete'){
             this.deleteValueOrAnnotations();
         }
         else if((this.state.button_annotation === annotationType.CENTER  && this.state.key_annotation === annotationType.NONE )||
                     this.state.key_annotation === annotationType.CENTER){
-            this.updateCenter(key);
+            this.updateCenter(number);
         }
         else if((this.state.button_annotation === annotationType.CORNER  && this.state.key_annotation === annotationType.NONE )||
             this.state.key_annotation === annotationType.CORNER){
-            this.updateCorner(key);
+            this.updateCorner(number);
         }
         else{
-            this.fillTheValues(key)
+            this.fillTheValues(number)
+        }
+    }
+
+    liftState(event){
+        if(event.key === "Control" || event.key === "Shift"){
+            this.setState({key_annotation : annotationType.NONE});
         }
     }
 
     render(){
         return (
-            <div tabIndex={0} onKeyPress={(event) => {this.chooseAction(event.key)}}>
+            <div tabIndex={0} onKeyDown={(event) => {event.preventDefault(); this.chooseAction(event)}}
+                                onKeyUp={(event) => {this.liftState(event)}}>
             <div>
                {this.renderLine(0)}
                {this.renderLine(1)}
@@ -225,7 +239,9 @@ class Board extends React.Component{
     }
 
     setButtonAnnotation(newAnnotationType){
-        if(this.state.button_annotation === newAnnotationType){
+
+        console.log("WHen did i get here");
+        if(!this.state.button_annotation === newAnnotationType){
             this.setState({button_annotation: annotationType.NONE});
         }else{
             this.setState({button_annotation: newAnnotationType});
