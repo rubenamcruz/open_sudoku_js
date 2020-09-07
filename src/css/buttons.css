@@ -1,0 +1,23 @@
+.button-unselected {
+    width: 100px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+
+  .small {
+    width: 100px;
+    height: 25px;
+    font-size: 15px;
+  }
+
+
+  .button-selected {
+    width: 100px;
+    height: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: powderblue;
+  }

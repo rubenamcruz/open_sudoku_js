@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './css/index.css';
 import './css/squares.css';
+import './css/buttons.css';
 import Board from './views/board.js';
 
 
