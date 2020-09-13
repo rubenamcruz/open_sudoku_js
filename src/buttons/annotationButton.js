@@ -3,7 +3,7 @@ import {annotationType, annotationText} from '../utils/annotations';
 
 
 
-class StandardButton extends React.Component{
+class AnnotationButton extends React.Component{
 
     render(){
         return (
@@ -25,4 +25,4 @@ class StandardButton extends React.Component{
 
 }
 
-export default StandardButton;
+export default AnnotationButton;

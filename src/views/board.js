@@ -1,6 +1,6 @@
 import React from 'react';
 import Square from '../squares/square.js';
-import StandardButton from '../buttons/standardButton.js';
+import AnnotationButton from '../buttons/annotationButton.js';
 import global_verifier from '../utils/sudoku_verifier';
 import {column_rule, line_rule, square_rule} from '../utils/rules/basic_rules';
 import {annotationType, annotationText} from '../utils/annotations';
@@ -194,11 +194,11 @@ class Board extends React.Component{
             <br/>
             <div>
                 <div style={{float:"left"}}>
-                <StandardButton name={"center"} 
+                <AnnotationButton name={"center"} 
                                 onClick={() => this.setButtonAnnotation(annotationType.CENTER)} 
                                 key_annotation={this.state.key_annotation} 
                                 button_annotation={this.state.button_annotation}/>
-                <StandardButton name={"corner"} 
+                <AnnotationButton name={"corner"} 
                                 onClick={() => this.setButtonAnnotation(annotationType.CORNER)} 
                                 key_annotation={this.state.key_annotation} 
                                 button_annotation={this.state.button_annotation}/>
