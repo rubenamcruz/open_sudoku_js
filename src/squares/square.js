@@ -1,6 +1,7 @@
 import React from 'react';
 import CenterSquare from './centerSquare.js';
 import CornerSquare from './cornerSquare.js';
+import { colorMap } from '../utils/annotations.js';
 
 class Square extends React.Component{
     render() {
@@ -74,7 +75,10 @@ class Square extends React.Component{
         } else{
             value += "square_right_border ";
         }
-
+        
+        if(backgroundColor){
+            value += colorMap[backgroundColor];
+        }
         return value;
 
     }

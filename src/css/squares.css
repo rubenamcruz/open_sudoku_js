@@ -111,3 +111,42 @@
 .not_locked{
   color: mediumblue;
 }
+
+
+
+
+.white_color{
+  background-color: white;
+}
+
+.green_color{
+  background-color: springgreen;
+}
+
+.pink_color{
+  background-color: palevioletred;
+}
+
+.blue_color{
+  background-color: dodgerblue;
+}
+
+.grey_color {
+  background-color: grey;
+}
+
+.orange_color {
+  background-color: orange;
+}
+
+.yellow_color {
+  background-color: yellow;
+}
+
+.red_color {
+  background-color: orangered;
+}
+
+.purple_color{
+  background-color: orchid;
+}

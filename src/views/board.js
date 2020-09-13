@@ -3,9 +3,10 @@ import Square from '../squares/square.js';
 import AnnotationButton from '../buttons/annotationButton.js';
 import SmallButton from '../buttons/smallButton.js';
 import NumberedButtonGrid from '../buttons/numberedButtonGrid.js'
+import ColoredButtonGrid from '../buttons/coloredButtonGrid.js'
 import global_verifier from '../utils/sudoku_verifier';
 import { column_rule, line_rule, square_rule } from '../utils/rules/basic_rules';
-import { annotationType, annotationText } from '../utils/annotations';
+import { annotationType, annotationText, colorMap } from '../utils/annotations';
 
 class Board extends React.Component {
 
@@ -15,6 +16,7 @@ class Board extends React.Component {
         let locked = null;
         let center_values = null;
         let corner_values = null;
+        let color_values = null; 
         let conflicts = null;
         if (this.props.puzzle != null) {
             squares = this.props.puzzle;
@@ -22,11 +24,13 @@ class Board extends React.Component {
             conflicts = this.props.puzzle.map(x => x.map(y => false));
             center_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
             corner_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
+            color_values = this.props.puzzle.map(x => x.map(y => colorMap[1]));
         } else {
             squares = Array(9).fill(null);
             locked = Array(9).fill(null);
             center_values = Array(9).fill(null);
             corner_values = Array(9).fill(null);
+            color_values = Array(9).fill(null);
             conflicts = Array(9).fill(null);
             for (let i = 0; i < 9; i++) {
                 squares[i] = Array(9).fill(null);
@@ -34,6 +38,7 @@ class Board extends React.Component {
                 conflicts[i] = Array(9).fill(false);
                 center_values[i] = Array(9).fill(this.emptyValues());
                 corner_values[i] = Array(9).fill(this.emptyValues());
+                color_values[i] = Array(9).fill(colorMap[1]);
             }
         }
         this.state = {
@@ -42,6 +47,7 @@ class Board extends React.Component {
             selected: { line: null, column: null },
             center_values: center_values,
             corner_values: corner_values,
+            color_values: color_values,
             conflicts: conflicts,
             button_annotation: annotationType.NONE,
             key_annotation: annotationType.NONE
@@ -54,6 +60,7 @@ class Board extends React.Component {
         let locked = this.state.locked[line][column];
         let centerValues = this.state.center_values[line][column];
         let cornerValues = this.state.corner_values[line][column];
+        let colorValue = this.state.color_values[line][column];
         let conflicts = this.state.conflicts[line][column];
         return (
             <Square line={line} column={column} value={value}
@@ -62,6 +69,7 @@ class Board extends React.Component {
                 centerValues={centerValues}
                 cornerValues={cornerValues}
                 conflicts={conflicts}
+                color = {colorValue}
                 onClick={() => this.changeSelectedTile(line, column)} />
         )
     }
@@ -184,6 +192,12 @@ class Board extends React.Component {
     }
 
     render() {
+        let inputGrid;
+        if(this.state.key_annotation === annotationType.NONE && this.state.button_annotation === annotationType.COLOR){
+            inputGrid = <ColoredButtonGrid onClick={(number) => this.colorMeSoftly(number)} ></ColoredButtonGrid>;
+        }else{
+            inputGrid = <NumberedButtonGrid onClick={(number) => this.applyAction(number)} ></NumberedButtonGrid>
+        }
         return (
             <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
                 onKeyUp={(event) => { this.liftState(event) }}>
@@ -218,6 +232,12 @@ class Board extends React.Component {
                             key_annotation={this.state.key_annotation}
                             button_annotation={this.state.button_annotation} />
                         </div>
+                        <div style={{clear: "left"}}>
+                        <AnnotationButton name={"color"}
+                            onClick={() => this.setButtonAnnotation(annotationType.COLOR)}
+                            key_annotation={this.state.key_annotation}
+                            button_annotation={this.state.button_annotation} />
+                        </div>
                         <div>
                         <SmallButton name='check' onClick={() => {
                             let results = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
@@ -240,11 +260,19 @@ class Board extends React.Component {
                     </div>
                 </div>
                 <div  style={{ float: "left"}}>
-                    <NumberedButtonGrid onClick={(number) => this.applyAction(number)} ></NumberedButtonGrid>
+                    {inputGrid}
                 </div>
                 </div>
             </div>
         )
+    }
+
+    colorMeSoftly(number){
+        if(this.state.selected.line !== null && this.state.selected.column !== null){
+            let color_values = this.state.color_values.slice();
+            color_values[this.state.selected.line][this.state.selected.column] = number;
+            this.setState({color_values: color_values});
+        }
     }
 
     getButtonClass(button_type) {
