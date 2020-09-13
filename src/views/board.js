@@ -100,7 +100,7 @@ class Board extends React.Component {
 
 
     fillTheValues(key) {
-        if (!this.state.locked[this.state.selected.line][this.state.selected.column]) {
+        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
             let squares = this.state.squares.slice();
             if (key >= 1 && key <= 9) {
                 squares[this.state.selected.line][this.state.selected.column] = Number(key);
@@ -110,7 +110,7 @@ class Board extends React.Component {
     }
 
     updateCenter(key) {
-        if (!this.state.locked[this.state.selected.line][this.state.selected.column]) {
+        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
             let center_values = this.state.center_values.slice();
             if (key >= 1 && key <= 9) {
                 center_values[this.state.selected.line][this.state.selected.column][Number(key)] = !center_values[this.state.selected.line][this.state.selected.column][Number(key)];
@@ -120,7 +120,7 @@ class Board extends React.Component {
     }
 
     updateCorner(key) {
-        if (!this.state.locked[this.state.selected.line][this.state.selected.column]) {
+        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
             let corner_values = this.state.corner_values.slice();
             if (key >= 1 && key <= 9) {
                 corner_values[this.state.selected.line][this.state.selected.column][Number(key)] = !corner_values[this.state.selected.line][this.state.selected.column][Number(key)];
@@ -130,7 +130,7 @@ class Board extends React.Component {
     }
 
     deleteValueOrAnnotations() {
-        if (!this.state.locked[this.state.selected.line][this.state.selected.column]) {
+        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
             if (this.state.squares[this.state.selected.line][this.state.selected.column]) {
                 let squares = this.state.squares.slice();
                 squares[this.state.selected.line][this.state.selected.column] = null;
@@ -229,7 +229,7 @@ class Board extends React.Component {
                     </div>
                 </div>
                 <div  style={{ float: "left"}}>
-                    <NumberedButtonGrid></NumberedButtonGrid>
+                    <NumberedButtonGrid onClick={(number) => this.fillTheValues(number)} ></NumberedButtonGrid>
                 </div>
                 </div>
             </div>
@@ -246,7 +246,6 @@ class Board extends React.Component {
 
     setButtonAnnotation(newAnnotationType) {
 
-        console.log("WHen did i get here");
         if (!this.state.button_annotation === newAnnotationType) {
             this.setState({ button_annotation: annotationType.NONE });
         } else {
