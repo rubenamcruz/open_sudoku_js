@@ -6,7 +6,7 @@ const annotationType = {
 }
 
 const annotationText = {
-    0 : "none",
+    0 : "number",
     1 : "center",
     2 : "corner",
     3 : "colour"

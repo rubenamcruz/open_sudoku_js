@@ -155,11 +155,16 @@ class Board extends React.Component {
             this.setState({ key_annotation: annotationType.CORNER });
         }
 
-        let number = event.keyCode - 48;
         if (event.key === 'Delete') {
             this.deleteValueOrAnnotations();
         }
-        else if ((this.state.button_annotation === annotationType.CENTER && this.state.key_annotation === annotationType.NONE) ||
+        else {
+            this.applyAction(event.keyCode - 48);
+        }
+    }
+
+    applyAction(number) {
+        if ((this.state.button_annotation === annotationType.CENTER && this.state.key_annotation === annotationType.NONE) ||
             this.state.key_annotation === annotationType.CENTER) {
             this.updateCenter(number);
         }
@@ -197,10 +202,16 @@ class Board extends React.Component {
                 <div style={{height: "225px"}}>
                 <div>
                     <div style={{ float: "left" }}>
+                        <AnnotationButton name={"number"}
+                            onClick={() => this.setButtonAnnotation(annotationType.NONE)}
+                            key_annotation={this.state.key_annotation}
+                            button_annotation={this.state.button_annotation} />
+                        <div style={{clear: "left"}}>
                         <AnnotationButton name={"center"}
                             onClick={() => this.setButtonAnnotation(annotationType.CENTER)}
                             key_annotation={this.state.key_annotation}
                             button_annotation={this.state.button_annotation} />
+                        </div>
                         <div style={{clear: "left"}}>
                         <AnnotationButton name={"corner"}
                             onClick={() => this.setButtonAnnotation(annotationType.CORNER)}
@@ -229,7 +240,7 @@ class Board extends React.Component {
                     </div>
                 </div>
                 <div  style={{ float: "left"}}>
-                    <NumberedButtonGrid onClick={(number) => this.fillTheValues(number)} ></NumberedButtonGrid>
+                    <NumberedButtonGrid onClick={(number) => this.applyAction(number)} ></NumberedButtonGrid>
                 </div>
                 </div>
             </div>
@@ -246,7 +257,7 @@ class Board extends React.Component {
 
     setButtonAnnotation(newAnnotationType) {
 
-        if (!this.state.button_annotation === newAnnotationType) {
+        if (this.state.button_annotation === newAnnotationType) {
             this.setState({ button_annotation: annotationType.NONE });
         } else {
             this.setState({ button_annotation: newAnnotationType });
