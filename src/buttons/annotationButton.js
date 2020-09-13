@@ -9,7 +9,6 @@ class AnnotationButton extends React.Component{
         return (
             <button className={this.getButtonClass(this.props.name)} onClick={this.props.onClick}>
                     {this.props.name}
-                    {this.props.annotationType}
                 </button>
         )
     }
