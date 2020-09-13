@@ -2,6 +2,7 @@ import React from 'react';
 import Square from '../squares/square.js';
 import AnnotationButton from '../buttons/annotationButton.js';
 import SmallButton from '../buttons/smallButton.js';
+import NumberedButtonGrid from '../buttons/numberedButtonGrid.js'
 import global_verifier from '../utils/sudoku_verifier';
 import { column_rule, line_rule, square_rule } from '../utils/rules/basic_rules';
 import { annotationType, annotationText } from '../utils/annotations';
@@ -193,19 +194,20 @@ class Board extends React.Component {
                     {this.renderLine(8)}
                 </div>
                 <br />
+                <div style={{height: "225px"}}>
                 <div>
                     <div style={{ float: "left" }}>
                         <AnnotationButton name={"center"}
                             onClick={() => this.setButtonAnnotation(annotationType.CENTER)}
                             key_annotation={this.state.key_annotation}
                             button_annotation={this.state.button_annotation} />
+                        <div style={{clear: "left"}}>
                         <AnnotationButton name={"corner"}
                             onClick={() => this.setButtonAnnotation(annotationType.CORNER)}
                             key_annotation={this.state.key_annotation}
                             button_annotation={this.state.button_annotation} />
-
-                    </div>
-                    <div style={{ float: "left" }}>
+                        </div>
+                        <div>
                         <SmallButton name='check' onClick={() => {
                             let results = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
                             if (results.length === 0) {
@@ -219,11 +221,16 @@ class Board extends React.Component {
                                 alert("There are conflicts");
                             }
                         }} title="Check if solution is valid" />
+                        </div>
                         <div>
                             <SmallButton onClick={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
                                 title="Clear conflict annotation" name='clear' />
                         </div>
                     </div>
+                </div>
+                <div  style={{ float: "left"}}>
+                    <NumberedButtonGrid></NumberedButtonGrid>
+                </div>
                 </div>
             </div>
         )
