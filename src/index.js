@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './css/index.css';
 import './css/squares.css';
 import './css/buttons.css';
-import Board from './views/board.js';
+import Game from './views/game.js';
 
 
 class Page extends React.Component {
@@ -12,7 +12,7 @@ class Page extends React.Component {
     render() {
       return (
         <div className="page-class" >
-            <Board puzzle={[[null,1, 6, null, null, null, 4, 3, 8], 
+            <Game puzzle={[[null,1, 6, null, null, null, 4, 3, 8], 
                             [3, 4, null, null, 9, 6, 2, null, null],
                             [8, null, null, null, null, null, 5, 6, null],
                             [1, null, null, null, 5, 3, null, null, null],
