@@ -15,7 +15,7 @@ class ButtonField extends React.Component {
             inputGrid = <NumberedButtonGrid onClick={(number) => this.props.numberBehaviour(number)} ></NumberedButtonGrid>
         }
         return (
-            <div style={{height: "225px"}}> 
+            <div > 
                 <div style={{ float: "left" }}>
                     <AnnotationButton name={"number"}
                         onClick={() => this.props.setButtonAnnotation(annotationType.NONE)}

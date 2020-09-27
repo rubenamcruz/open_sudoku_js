@@ -5,11 +5,14 @@
 
 body{
   background-color: ghostwhite;
+  margin: 0px;
+  width: 100vw;
+  height: 100vh;
 }
 
 
   .board-row:after {
-    clear: both;
+    clear: left;
     content: "";
     display: table;
   }
@@ -18,4 +21,30 @@ body{
 
   div:focus {outline:0;}
 
-  
+  .board{
+    top: 15%;
+    left: 10%;
+    width: 1200px;
+    position: absolute;
+  }
+
+  .page-class{
+    height: 100%;
+    width: 100%;
+  }
+
+  #root{
+    height: 100%;
+    width: 100%;
+  }
+
+  .button-grid{
+    position: relative;
+  }
+
+  .button-div{
+    display: inline;
+    position: relative;
+    top: 50%;
+    /* left: 52%; */
+  }

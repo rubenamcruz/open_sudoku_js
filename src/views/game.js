@@ -1,6 +1,7 @@
 import React from 'react';
 import Board from '../game/board.js';
 import ButtonField from '../game/buttonField.js';
+import NavBar from '../game/navbar.js';
 import { annotationType, annotationText, colorMap } from '../utils/annotations';
 import global_verifier from '../utils/sudoku_verifier.js';
 import {column_rule, line_rule, square_rule} from '../utils/rules/basic_rules.js';
@@ -155,8 +156,11 @@ class Game extends React.Component {
 
     render() {
         return (
+            <div style={{height:"100%"}}>
+            <NavBar/>
             <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
-                onKeyUp={(event) => { this.liftState(event) }}>
+                onKeyUp={(event) => { this.liftState(event) }} className="board">
+                <div style={{width: "50%", float:"left"}}>
                 <Board
                     squares={this.state.squares}
                     selected={this.state.selected}
@@ -166,8 +170,8 @@ class Game extends React.Component {
                     color_values={this.state.color_values}
                     conflicts={this.state.conflicts}
                     changeSelectedTile={(line, column) => this.changeSelectedTile(line, column)} />
-                <br />
-                <div >
+                    </div>
+                    <div className="button-div">
                     <ButtonField
                         number_annotation={!(this.state.key_annotation === annotationType.NONE && this.state.button_annotation === annotationType.COLOR)}
                         numberBehaviour={(number) => this.applyAction(number)}
@@ -178,7 +182,8 @@ class Game extends React.Component {
                         checkSolution={() => this.checkSolution()}
                         clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
                     />
-                </div>
+                    </div>
+            </div>
             </div>
         )
     }
