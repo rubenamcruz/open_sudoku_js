@@ -8,6 +8,7 @@ body{
   margin: 0px;
   width: 100vw;
   height: 100vh;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 
@@ -44,7 +45,7 @@ body{
 
   .button-div{
     display: inline;
-    position: relative;
-    top: 50%;
-    /* left: 52%; */
+    position: absolute;
+    top: 25%;
+    left: 54%;
   }

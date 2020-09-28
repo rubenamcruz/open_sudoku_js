@@ -48,7 +48,8 @@ class Game extends React.Component {
             color_values: color_values,
             conflicts: conflicts,
             button_annotation: annotationType.NONE,
-            key_annotation: annotationType.NONE
+            key_annotation: annotationType.NONE,
+            finished: false
         };
     }
 
@@ -157,7 +158,7 @@ class Game extends React.Component {
     render() {
         return (
             <div style={{height:"100%"}}>
-            <NavBar/>
+            <NavBar finished={this.state.finished}/>
             <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
                 onKeyUp={(event) => { this.liftState(event) }} className="board">
                 <div style={{width: "50%", float:"left"}}>
@@ -216,7 +217,12 @@ class Game extends React.Component {
     checkSolution() {
         let results = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
         if (results.length === 0) {
-            alert("Sounds all right!");
+            if(this.checkIfThereIsNoNullValues()){
+                this.setState({finished: true});
+                alert("Good Job!");
+            }else{
+                alert("Sounds all right so far!");
+            }
         } else {
             let conflicts = this.emptyBooleanGrid();
             for (let result of results) {
@@ -225,6 +231,17 @@ class Game extends React.Component {
             this.setState({ conflicts: conflicts });
             alert("There are conflicts");
         }
+    }
+
+    checkIfThereIsNoNullValues(){
+        for(let line of this.state.squares){
+            for(let elem of line){
+                if(elem == null){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 

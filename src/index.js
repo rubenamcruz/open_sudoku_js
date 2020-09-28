@@ -4,6 +4,7 @@ import './css/index.css';
 import './css/squares.css';
 import './css/buttons.css';
 import './css/navbar.css';
+import './css/clock.css';
 import Game from './views/game.js';
 
 
