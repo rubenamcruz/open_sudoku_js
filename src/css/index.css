@@ -1,15 +1,36 @@
-.page-class{
-    background-color: ghostwhite;
-    align-content: center;
-}
+@import url('https://fonts.googleapis.com/css2?family=Trispace&display=swap');
 
 body{
   background-color: ghostwhite;
-  margin: 0px;
+  margin: 0;
   width: 100vw;
   height: 100vh;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Trispace', sans-serif;
 }
+
+.game-div{
+  height: 96vh;
+  width: 100vw;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.board{
+  margin: 0 50px;
+}
+
+.button-div{
+  display: inline;
+  margin: 0 50px;
+}
+
+
+button:focus {outline:0;}
+
+div:focus {outline:0;}
 
 
   .board-row:after {
@@ -18,34 +39,11 @@ body{
     display: table;
   }
 
-  button:focus {outline:0;}
 
-  div:focus {outline:0;}
 
-  .board{
-    top: 15%;
-    left: 10%;
-    width: 1200px;
-    position: absolute;
-  }
 
-  .page-class{
-    height: 100%;
-    width: 100%;
-  }
 
-  #root{
-    height: 100%;
-    width: 100%;
-  }
 
   .button-grid{
     position: relative;
-  }
-
-  .button-div{
-    display: inline;
-    position: absolute;
-    top: 25%;
-    left: 54%;
   }

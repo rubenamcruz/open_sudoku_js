@@ -160,8 +160,8 @@ class Game extends React.Component {
             <div style={{height:"100%"}}>
             <NavBar finished={this.state.finished}/>
             <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
-                onKeyUp={(event) => { this.liftState(event) }} className="board">
-                <div style={{width: "50%", float:"left"}}>
+                onKeyUp={(event) => { this.liftState(event) }} className="game-div">
+                <div className="board">
                 <Board
                     squares={this.state.squares}
                     selected={this.state.selected}

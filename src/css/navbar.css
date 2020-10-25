@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@400&display=swap');
+
 .navbar{
-    height: 40px;
+    height: 4vh;
     background-color: lightsteelblue;
+    font-family: 'Teko', sans-serif;
 }
