@@ -157,11 +157,12 @@ class Game extends React.Component {
 
     render() {
         return (
-            <div style={{height:"100%"}}>
+            <div>
             <NavBar finished={this.state.finished}/>
+            <div className="main-area">
             <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
                 onKeyUp={(event) => { this.liftState(event) }} className="game-div">
-                <div className="board">
+
                 <Board
                     squares={this.state.squares}
                     selected={this.state.selected}
@@ -171,8 +172,7 @@ class Game extends React.Component {
                     color_values={this.state.color_values}
                     conflicts={this.state.conflicts}
                     changeSelectedTile={(line, column) => this.changeSelectedTile(line, column)} />
-                    </div>
-                    <div className="button-div">
+
                     <ButtonField
                         number_annotation={!(this.state.key_annotation === annotationType.NONE && this.state.button_annotation === annotationType.COLOR)}
                         numberBehaviour={(number) => this.applyAction(number)}
@@ -183,7 +183,7 @@ class Game extends React.Component {
                         checkSolution={() => this.checkSolution()}
                         clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
                     />
-                    </div>
+            </div>
             </div>
             </div>
         )

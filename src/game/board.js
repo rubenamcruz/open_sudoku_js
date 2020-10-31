@@ -42,7 +42,7 @@ class Board extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="board">
                 {this.renderLine(0)}
                 {this.renderLine(1)}
                 {this.renderLine(2)}

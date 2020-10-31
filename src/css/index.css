@@ -4,27 +4,34 @@ body{
   background-color: ghostwhite;
   margin: 0;
   width: 100vw;
-  height: 100vh;
   font-family: 'Trispace', sans-serif;
 }
 
 .game-div{
-  height: 96vh;
-  width: 100vw;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-flex;
+}
 
+.main-area{
+  display: flex;
+  min-height: 96vh;
+  width: 100vw;
+  justify-content: center;
+  align-items: center;
 }
 
 .board{
+  display: inline-block;
   margin: 0 50px;
+  min-width: 548px;
+  min-height: 548px;
 }
 
 .button-div{
-  display: inline;
-  margin: 0 50px;
+  display: inline-flex;
+  min-height: 548px;
+  min-width: 325px;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -32,18 +39,28 @@ button:focus {outline:0;}
 
 div:focus {outline:0;}
 
+.board-row {
+  display: block;
+}
 
-  .board-row:after {
-    clear: left;
-    content: "";
-    display: table;
+.button-grid{
+  position: relative;
+}
+
+@media screen and (max-width: 1300px) {
+
+  .game-div{
+    display: inline-block;
   }
 
-
-
-
-
-
-  .button-grid{
-    position: relative;
+  .board{
+    margin: 10px 0;
   }
+  
+  .button-div{
+    display: flex;
+    margin: 10px 0;
+    min-width: 548px;
+    min-height: 250px;
+  }
+}

@@ -2,6 +2,8 @@
 
 .navbar{
     height: 4vh;
+    min-height: 33px;
+    width: 100vw;
     background-color: lightsteelblue;
     font-family: 'Teko', sans-serif;
 }
