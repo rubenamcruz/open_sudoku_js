@@ -100,12 +100,13 @@
   border-bottom: 3px solid #000;
 }
 
-.selected{
-  background-color: palegoldenrod;
-}
+
 
 .conflict{
-  background-color: indianred;
+  background-color: rgb(205, 92, 92);
+}
+.conflict_selected{
+  background-color: rgb(188, 69, 7);
 }
 
 .not_locked{
@@ -116,37 +117,68 @@
 
 
 .white_color{
-  background-color: white;
+  background-color: rgb(255, 255, 255);
+}
+.white_color_selected{
+  background-color: rgb(238, 232, 170);
 }
 
+
 .green_color{
-  background-color: springgreen;
+  background-color: rgb(0, 255, 127);
+}
+
+.green_color_selected{
+  background-color: rgb(0, 232, 42);
 }
 
 .pink_color{
-  background-color: palevioletred;
+  background-color: rgb(216, 112, 147);
+}
+.pink_color_selected{
+  background-color: rgb(199, 89, 62);
 }
 
 .blue_color{
-  background-color: dodgerblue;
+  background-color: rgb(30, 144, 255);
+}
+.blue_color_selected{
+  background-color: rgb(17, 121, 170);
 }
 
+
 .grey_color {
-  background-color: grey;
+  background-color: rgb(128, 128, 128);
+}
+.grey_color_selected {
+  background-color: rgb(111, 105, 43);
 }
 
 .orange_color {
-  background-color: orange;
+  background-color: rgb(255, 165, 0);
+}
+.orange_color_selected {
+  background-color: rgb(238, 142, 0);
 }
 
 .yellow_color {
-  background-color: yellow;
+  background-color: rgb(255, 255, 0);
+}
+.yellow_color_selected {
+  background-color: rgb(238, 232, 0);
 }
 
 .red_color {
-  background-color: orangered;
+  background-color: rgb(255, 69, 0);
+}
+.red_color_selected {
+  background-color: rgb(238, 46, 0);
 }
 
 .purple_color{
-  background-color: orchid;
+  background-color: rgb(218, 112, 214);
 }
+.purple_color_selected{
+  background-color: rgb(201, 89, 129);
+}
+

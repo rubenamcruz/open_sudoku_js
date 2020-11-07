@@ -5,7 +5,7 @@ class Board extends React.Component {
 
     renderSquare(line, column) {
         let value = this.props.squares[line][column];
-        let selected = this.props.selected.line === line && this.props.selected.column === column;
+        let selected = this.props.selected[line][column];
         let locked = this.props.locked[line][column];
         let centerValues = this.props.center_values[line][column];
         let cornerValues = this.props.corner_values[line][column];

@@ -10,19 +10,21 @@ class Game extends React.Component {
 
     constructor(props) {
         super(props);
+        // todo: history over squares values; no history for selected squares; separate history for a single anotation
         let squares = null;
         let locked = null;
         let center_values = null;
         let corner_values = null;
         let color_values = null;
         let conflicts = null;
+        let selected = this.emptyBooleanGrid();
         if (this.props.puzzle != null) {
             squares = this.props.puzzle;
             locked = this.props.puzzle.map(x => x.map(y => y != null));
             conflicts = this.props.puzzle.map(x => x.map(y => false));
             center_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
             corner_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
-            color_values = this.props.puzzle.map(x => x.map(y => colorMap[1]));
+            color_values = this.props.puzzle.map(x => x.map(y => 1));
         } else {
             squares = Array(9).fill(null);
             locked = Array(9).fill(null);
@@ -36,20 +38,21 @@ class Game extends React.Component {
                 conflicts[i] = Array(9).fill(false);
                 center_values[i] = Array(9).fill(this.emptyValues());
                 corner_values[i] = Array(9).fill(this.emptyValues());
-                color_values[i] = Array(9).fill(colorMap[1]);
+                color_values[i] = Array(9).fill(1);
             }
         }
         this.state = {
             squares: squares,
             locked: locked,
-            selected: { line: null, column: null },
+            selected: selected,
             center_values: center_values,
             corner_values: corner_values,
             color_values: color_values,
             conflicts: conflicts,
             button_annotation: annotationType.NONE,
             key_annotation: annotationType.NONE,
-            finished: false
+            finished: false,
+            multipleSquareSelection: false
         };
     }
 
@@ -66,62 +69,84 @@ class Game extends React.Component {
     }
 
     changeSelectedTile(line, column) {
-        this.setState({ selected: { line: line, column: column } });
+        let selected = null;
+        if(this.state.multipleSquareSelection){
+            selected = this.state.selected.slice();
+        }else{
+            selected = this.emptyBooleanGrid();
+        }
+        selected[line][column] = !selected[line][column];
+        this.setState({ selected: selected });
     }
 
 
 
-    fillTheValues(key) {
-        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
-            let squares = this.state.squares.slice();
-            if (key >= 1 && key <= 9) {
-                squares[this.state.selected.line][this.state.selected.column] = Number(key);
-            }
-            this.setState({ squares: squares });
+    fillSquareValues(key) {
+        let squares = this.state.squares.slice();
+        for(let i = 0; i < 9; i++){
+            for(let j = 0; j < 9; j++){
+                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+                    if (key >= 1 && key <= 9) {
+                        squares[i][j] = Number(key);
+                    }
+                }
+            }    
         }
+        this.setState({ squares: squares });
     }
 
     updateCenter(key) {
-        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
-            let center_values = this.state.center_values.slice();
-            if (key >= 1 && key <= 9) {
-                center_values[this.state.selected.line][this.state.selected.column][Number(key)] = !center_values[this.state.selected.line][this.state.selected.column][Number(key)];
-            }
-            this.setState({ center_values: center_values });
+        let center_values = this.state.center_values.slice();
+        for(let i = 0; i < 9; i++){
+            for(let j = 0; j < 9; j++){
+                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+                    if (key >= 1 && key <= 9) {
+                        center_values[i][j][Number(key)] = !center_values[i][j][Number(key)];
+                    }
+                }
+            }    
         }
+        this.setState({ center_values: center_values });
     }
 
     updateCorner(key) {
-        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
-            let corner_values = this.state.corner_values.slice();
-            if (key >= 1 && key <= 9) {
-                corner_values[this.state.selected.line][this.state.selected.column][Number(key)] = !corner_values[this.state.selected.line][this.state.selected.column][Number(key)];
-            }
-            this.setState({ corner_values: corner_values });
+        let corner_values = this.state.corner_values.slice();
+        for(let i = 0; i < 9; i++){
+            for(let j = 0; j < 9; j++){
+                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+                    if (key >= 1 && key <= 9) {
+                        corner_values[i][j][Number(key)] = !corner_values[i][j][Number(key)];
+                    }
+                }
+            }    
         }
+        this.setState({ corner_values: corner_values });
     }
 
     deleteValueOrAnnotations() {
-        if (this.state.selected.line !== null && this.state.selected.column !== null && !this.state.locked[this.state.selected.line][this.state.selected.column]) {
-            if (this.state.squares[this.state.selected.line][this.state.selected.column]) {
-                let squares = this.state.squares.slice();
-                squares[this.state.selected.line][this.state.selected.column] = null;
-                this.setState({ squares: squares });
-            } else {
-                let corner_values = this.state.corner_values.slice();
-                let center_values = this.state.center_values.slice();
-                corner_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
-                center_values[this.state.selected.line][this.state.selected.column] = this.emptyValues();
-                this.setState({ corner_values: corner_values });
-                this.setState({ center_values: center_values });
-            }
+        let squares = this.state.squares.slice();
+        let corner_values = this.state.corner_values.slice();
+        let center_values = this.state.center_values.slice();
+            
+        for(let i = 0; i < 9; i++){
+            for(let j = 0; j < 9; j++){
+                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+                    if (squares[i][j]) {
+                        squares[i][j] = null;
+                    } else {
+                        corner_values[i][j] = this.emptyValues();
+                        center_values[i][j] = this.emptyValues();
+                    }
+                }
+            }    
         }
+        this.setState({ squares: squares, corner_values: corner_values, center_values: center_values });
     }
 
 
     chooseAction(event) {
         if (event.ctrlKey) {
-            this.setState({ key_annotation: annotationType.CENTER });
+            this.setState({ key_annotation: annotationType.CENTER, multipleSquareSelection: true });
         }
         else if (event.shiftKey) {
             this.setState({ key_annotation: annotationType.CORNER });
@@ -145,12 +170,16 @@ class Game extends React.Component {
             this.updateCorner(number);
         }
         else {
-            this.fillTheValues(number)
+            this.fillSquareValues(number)
         }
     }
 
     liftState(event) {
-        if (event.key === "Control" || event.key === "Shift") {
+        if (event.key === "Control"){
+            this.setState({ key_annotation: annotationType.NONE,  multipleSquareSelection: false });
+
+        } 
+        if(event.key === "Shift") {
             this.setState({ key_annotation: annotationType.NONE });
         }
     }
@@ -158,43 +187,47 @@ class Game extends React.Component {
     render() {
         return (
             <div>
-            <NavBar finished={this.state.finished}/>
-            <div className="main-area">
-            <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
-                onKeyUp={(event) => { this.liftState(event) }} className="game-div">
+                <NavBar finished={this.state.finished} />
+                <div className="main-area">
+                    <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
+                        onKeyUp={(event) => { this.liftState(event) }} className="game-div">
 
-                <Board
-                    squares={this.state.squares}
-                    selected={this.state.selected}
-                    locked={this.state.locked}
-                    center_values={this.state.center_values}
-                    corner_values={this.state.corner_values}
-                    color_values={this.state.color_values}
-                    conflicts={this.state.conflicts}
-                    changeSelectedTile={(line, column) => this.changeSelectedTile(line, column)} />
+                        <Board
+                            squares={this.state.squares}
+                            selected={this.state.selected}
+                            locked={this.state.locked}
+                            center_values={this.state.center_values}
+                            corner_values={this.state.corner_values}
+                            color_values={this.state.color_values}
+                            conflicts={this.state.conflicts}
+                            changeSelectedTile={(line, column) => this.changeSelectedTile(line, column)} />
 
-                    <ButtonField
-                        number_annotation={!(this.state.key_annotation === annotationType.NONE && this.state.button_annotation === annotationType.COLOR)}
-                        numberBehaviour={(number) => this.applyAction(number)}
-                        colorBehaviour={(number) => this.colorMeSoftly(number)}
-                        setButtonAnnotation={(annotationType) => this.setButtonAnnotation(annotationType)}
-                        key_annotation={this.state.key_annotation}
-                        button_annotation={this.state.button_annotation}
-                        checkSolution={() => this.checkSolution()}
-                        clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
-                    />
-            </div>
-            </div>
+                        <ButtonField
+                            number_annotation={!(this.state.key_annotation === annotationType.NONE && this.state.button_annotation === annotationType.COLOR)}
+                            numberBehaviour={(number) => this.applyAction(number)}
+                            colorBehaviour={(number) => this.colorMeSoftly(number)}
+                            setButtonAnnotation={(annotationType) => this.setButtonAnnotation(annotationType)}
+                            key_annotation={this.state.key_annotation}
+                            button_annotation={this.state.button_annotation}
+                            checkSolution={() => this.checkSolution()}
+                            clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
+                        />
+                    </div>
+                </div>
             </div>
         )
     }
 
     colorMeSoftly(number) {
-        if (this.state.selected.line !== null && this.state.selected.column !== null) {
-            let color_values = this.state.color_values.slice();
-            color_values[this.state.selected.line][this.state.selected.column] = number;
-            this.setState({ color_values: color_values });
+        let color_values = this.state.color_values.slice();
+        for(let i = 0;i < 9;  i++){
+            for(let j=0; j<9; j++){
+                if(this.state.selected[i][j]){
+                    color_values[i][j] = number;
+                }
+            }
         }
+        this.setState({ color_values: color_values });
     }
 
     getButtonClass(button_type) {
