@@ -29,9 +29,12 @@ body{
 .button-div{
   display: inline-flex;
   min-height: 548px;
-  min-width: 325px;
   justify-content: center;
   align-items: center;
+}
+
+.button-grid{
+  display: block;
 }
 
 
@@ -43,9 +46,6 @@ div:focus {outline:0;}
   display: block;
 }
 
-.button-grid{
-  position: relative;
-}
 
 @media screen and (max-width: 1300px) {
 
@@ -62,5 +62,9 @@ div:focus {outline:0;}
     margin: 10px 0;
     min-width: 548px;
     min-height: 250px;
+  }
+
+  .button-grid{
+    display: inherit;
   }
 }

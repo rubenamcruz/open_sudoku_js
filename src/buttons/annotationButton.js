@@ -15,9 +15,9 @@ class AnnotationButton extends React.Component{
 
     getButtonClass(button_type){
         if(annotationText[0] === button_type){
-            return this.props.key_annotation === annotationType.NONE && this.props.button_annotation === annotationType.NONE ? "button-selected" : "button-unselected";
+            return this.props.key_annotation === annotationType.NUMBER && this.props.button_annotation === annotationType.NUMBER ? "button-selected" : "button-unselected";
         }
-        if((this.props.key_annotation === annotationType.NONE && annotationText[this.props.button_annotation] === button_type) ||
+        if((this.props.key_annotation === annotationType.NUMBER && annotationText[this.props.button_annotation] === button_type) ||
             annotationText[this.props.key_annotation] === button_type){
             return "button-selected" 
         }

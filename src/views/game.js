@@ -49,8 +49,8 @@ class Game extends React.Component {
             corner_values: corner_values,
             color_values: color_values,
             conflicts: conflicts,
-            button_annotation: annotationType.NONE,
-            key_annotation: annotationType.NONE,
+            button_annotation: annotationType.NUMBER,
+            key_annotation: annotationType.NUMBER,
             finished: false,
             multipleSquareSelection: false
         };
@@ -161,11 +161,11 @@ class Game extends React.Component {
     }
 
     applyAction(number) {
-        if ((this.state.button_annotation === annotationType.CENTER && this.state.key_annotation === annotationType.NONE) ||
+        if ((this.state.button_annotation === annotationType.CENTER && this.state.key_annotation === annotationType.NUMBER) ||
             this.state.key_annotation === annotationType.CENTER) {
             this.updateCenter(number);
         }
-        else if ((this.state.button_annotation === annotationType.CORNER && this.state.key_annotation === annotationType.NONE) ||
+        else if ((this.state.button_annotation === annotationType.CORNER && this.state.key_annotation === annotationType.NUMBER) ||
             this.state.key_annotation === annotationType.CORNER) {
             this.updateCorner(number);
         }
@@ -176,11 +176,11 @@ class Game extends React.Component {
 
     liftState(event) {
         if (event.key === "Control"){
-            this.setState({ key_annotation: annotationType.NONE,  multipleSquareSelection: false });
+            this.setState({ key_annotation: annotationType.NUMBER,  multipleSquareSelection: false });
 
         } 
         if(event.key === "Shift") {
-            this.setState({ key_annotation: annotationType.NONE });
+            this.setState({ key_annotation: annotationType.NUMBER });
         }
     }
 
@@ -203,7 +203,7 @@ class Game extends React.Component {
                             changeSelectedTile={(line, column) => this.changeSelectedTile(line, column)} />
 
                         <ButtonField
-                            number_annotation={!(this.state.key_annotation === annotationType.NONE && this.state.button_annotation === annotationType.COLOR)}
+                            number_annotation={!(this.state.key_annotation === annotationType.NUMBER && this.state.button_annotation === annotationType.COLOR)}
                             numberBehaviour={(number) => this.applyAction(number)}
                             colorBehaviour={(number) => this.colorMeSoftly(number)}
                             setButtonAnnotation={(annotationType) => this.setButtonAnnotation(annotationType)}
@@ -231,7 +231,7 @@ class Game extends React.Component {
     }
 
     getButtonClass(button_type) {
-        if ((this.state.key_annotation === annotationType.NONE && annotationText[this.state.button_annotation] === button_type) ||
+        if ((this.state.key_annotation === annotationType.NUMBER && annotationText[this.state.button_annotation] === button_type) ||
             annotationText[this.state.key_annotation] === button_type) {
             return "button-selected"
         }
@@ -241,7 +241,7 @@ class Game extends React.Component {
     setButtonAnnotation(newAnnotationType) {
 
         if (this.state.button_annotation === newAnnotationType) {
-            this.setState({ button_annotation: annotationType.NONE });
+            this.setState({ button_annotation: annotationType.NUMBER });
         } else {
             this.setState({ button_annotation: newAnnotationType });
         }
