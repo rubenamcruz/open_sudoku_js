@@ -15,7 +15,7 @@ class ActionButton extends React.Component{
 
     getButtonClass(){
 
-        return "button-unselected " + this.props.extraClass;
+        return "standard-button button-color " + this.props.extraClass;
     }
 
 

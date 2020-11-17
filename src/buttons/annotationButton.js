@@ -14,14 +14,17 @@ class AnnotationButton extends React.Component{
     }
 
     getButtonClass(button_type){
+        let baseClass = "standard-button regular button-color "
         if(annotationText[0] === button_type){
-            return this.props.key_annotation === annotationType.NUMBER && this.props.button_annotation === annotationType.NUMBER ? "button-selected" : "button-unselected";
+            if(this.props.key_annotation === annotationType.NUMBER && this.props.button_annotation === annotationType.NUMBER){
+                baseClass += "selected";
+            }
         }
-        if((this.props.key_annotation === annotationType.NUMBER && annotationText[this.props.button_annotation] === button_type) ||
+        else if ((this.props.key_annotation === annotationType.NUMBER && annotationText[this.props.button_annotation] === button_type) ||
             annotationText[this.props.key_annotation] === button_type){
-            return "button-selected" 
+            baseClass += "selected";
         }
-        return "button-unselected";
+        return baseClass;
     }
 
 

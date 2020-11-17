@@ -1,47 +1,58 @@
-.button-unselected {
-    width: 100px;
-    height: 50px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 10px;
-    margin: 3px 3px;
-  }
-
-  .slim {
-    width: 100px;
-    height: 25px;
-    font-size: 15px;
-  }
-
-  .wide {
-    width: 98%;
-  }
-
-  .half-full-width {
-    width: 48%;
-    margin: 3px 1%;
-  }
+.standard-button {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 3px 3px;
+  height: 50px;
 
 
-  .button-selected {
-    width: 100px;
-    height: 50px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 10px;
-    background-color: powderblue;
-    margin: 3px 3px;
-  }
+  border-radius: 7px;
+  border-color: darkslategrey;
+  border-width: 2px;
 
-  .button-square-unselected {
-    width: 50px;
-    height: 50px;
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 10px;
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.3);
+}
 
-    margin: 3px 3px;
-  }
+.standard-button:active{
+  box-shadow: 1px 0px 3px 1px rgba(0, 0, 0, 0.3);
+  transform: translate(0,2px);
+}
+
+
+.button-color{
+  background-color: rgb(234, 231, 235);
+}
+
+.regular{
+  width: 100px;
+}
+
+.wide {
+  width: 98%;
+}
+
+.half-full-width {
+  width: 48%;
+  margin: 3px 1%;
+}
+
+.selected {
+  box-shadow: ;
+  background-color: powderblue;
+}
+
+.square-button {
+  width: 50px;
+}
+
+.button-square-unselected {
+  width: 50px;
+  height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+
+  margin: 3px 3px;
+}
 
 @media screen and (max-width: 1300px) {
   .half-full-width {

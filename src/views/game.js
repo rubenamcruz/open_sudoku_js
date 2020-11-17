@@ -230,13 +230,6 @@ class Game extends React.Component {
         this.setState({ color_values: color_values });
     }
 
-    getButtonClass(button_type) {
-        if ((this.state.key_annotation === annotationType.NUMBER && annotationText[this.state.button_annotation] === button_type) ||
-            annotationText[this.state.key_annotation] === button_type) {
-            return "button-selected"
-        }
-        return "button-unselected";
-    }
 
     setButtonAnnotation(newAnnotationType) {
 

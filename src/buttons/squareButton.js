@@ -13,9 +13,11 @@ class SquareButton extends React.Component{
     }
 
     getButtonClass(){
-        let button_class = "button-square-unselected ";
-        if(this.props.color !== null){
+        let button_class = "standard-button square-button ";
+        if(this.props.color != null){
             button_class += colorMap[this.props.color];
+        }else{
+            button_class += "button-color"
         }
         return button_class;
     }
