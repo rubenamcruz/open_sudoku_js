@@ -49,8 +49,8 @@ class Game extends React.Component {
             corner_values: corner_values,
             color_values: color_values,
             conflicts: conflicts,
-            button_annotation: annotationType.NUMBER,
-            key_annotation: annotationType.NUMBER,
+            previous_action: null,
+            current_action: annotationType.NUMBER,
             finished: false,
             multipleSquareSelection: false
         };
@@ -68,20 +68,77 @@ class Game extends React.Component {
         return value;
     }
 
-    changeSelectedTile(line, column) {
-        let selected = null;
-        if(this.state.multipleSquareSelection){
-            selected = this.state.selected.slice();
-        }else{
-            selected = this.emptyBooleanGrid();
+    render() {
+        return (
+            <div>
+                <NavBar finished={this.state.finished} />
+                <div className="main-area">
+                    <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseKeyBasedAction(event) }}
+                        onKeyUp={(event) => { this.removeKeyBasedAnnotation(event) }} className="game-div">
+
+                        <Board
+                            squares={this.state.squares}
+                            selected={this.state.selected}
+                            locked={this.state.locked}
+                            center_values={this.state.center_values}
+                            corner_values={this.state.corner_values}
+                            color_values={this.state.color_values}
+                            conflicts={this.state.conflicts}
+                            changeSelectedTile={(line, column) => this.selectNewSquare(line, column)} />
+
+                        <ButtonField
+                            number_annotation={!(this.state.current_action === annotationType.COLOR)}
+                            numberBehaviour={(number) => this.applyAction(number)}
+                            deleteBehaviour={() => this.deleteSquareValueOrAnnotations()}
+                            colorBehaviour={(number) => this.colorSelectedSquares(number)}
+                            changeAction={(annotationType) => this.changeAction(annotationType)}
+                            currentAction={this.state.current_action}
+                            checkSolution={() => this.checkSolution()}
+                            clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    chooseKeyBasedAction(event) {
+        let previous_action = this.state.current_action;
+        if (event.ctrlKey) {
+            this.setState({ previous_action: previous_action, current_action: annotationType.CENTER, multipleSquareSelection: true });
         }
-        selected[line][column] = !selected[line][column];
-        this.setState({ selected: selected });
+        else if (event.shiftKey) {
+            this.setState({ previous_action: previous_action, current_action: annotationType.CORNER });
+        }
+
+        if (event.key === 'Delete') {
+            this.deleteSquareValueOrAnnotations();
+        }
+        else {
+            this.applyAction(event.keyCode - 48);
+        }
+    }
+
+    removeKeyBasedAnnotation(event) {
+        let current_action = this.state.previous_action;
+        if (event.key === "Control"){
+            this.setState({ current_action: current_action, previous_action: null,  multipleSquareSelection: false });
+
+        } 
+        if(event.key === "Shift") {
+            this.setState({ current_action: current_action, previous_action: null });
+        }
+    }
+    
+    selectNewSquare(line, column) {
+        let selectedSquares = this.state.multipleSquareSelection ? this.state.selected.slice(): this.emptyBooleanGrid();
+        selectedSquares[line][column] = !selectedSquares[line][column];
+        this.setState({ selected: selectedSquares });
     }
 
 
 
-    fillSquareValues(key) {
+    updateValues(key) {
         let squares = this.state.squares.slice();
         for(let i = 0; i < 9; i++){
             for(let j = 0; j < 9; j++){
@@ -123,7 +180,7 @@ class Game extends React.Component {
         this.setState({ corner_values: corner_values });
     }
 
-    deleteValueOrAnnotations() {
+    deleteSquareValueOrAnnotations() {
         let squares = this.state.squares.slice();
         let corner_values = this.state.corner_values.slice();
         let center_values = this.state.center_values.slice();
@@ -144,81 +201,22 @@ class Game extends React.Component {
     }
 
 
-    chooseAction(event) {
-        if (event.ctrlKey) {
-            this.setState({ key_annotation: annotationType.CENTER, multipleSquareSelection: true });
-        }
-        else if (event.shiftKey) {
-            this.setState({ key_annotation: annotationType.CORNER });
-        }
-
-        if (event.key === 'Delete') {
-            this.deleteValueOrAnnotations();
-        }
-        else {
-            this.applyAction(event.keyCode - 48);
-        }
-    }
-
+    
     applyAction(number) {
-        if ((this.state.button_annotation === annotationType.CENTER && this.state.key_annotation === annotationType.NUMBER) ||
-            this.state.key_annotation === annotationType.CENTER) {
+        if (this.state.current_action === annotationType.CENTER){
             this.updateCenter(number);
         }
-        else if ((this.state.button_annotation === annotationType.CORNER && this.state.key_annotation === annotationType.NUMBER) ||
-            this.state.key_annotation === annotationType.CORNER) {
+        else if (this.state.current_action === annotationType.CORNER ) {
             this.updateCorner(number);
         }
         else {
-            this.fillSquareValues(number)
+            this.updateValues(number)
         }
     }
 
-    liftState(event) {
-        if (event.key === "Control"){
-            this.setState({ key_annotation: annotationType.NUMBER,  multipleSquareSelection: false });
 
-        } 
-        if(event.key === "Shift") {
-            this.setState({ key_annotation: annotationType.NUMBER });
-        }
-    }
 
-    render() {
-        return (
-            <div>
-                <NavBar finished={this.state.finished} />
-                <div className="main-area">
-                    <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseAction(event) }}
-                        onKeyUp={(event) => { this.liftState(event) }} className="game-div">
-
-                        <Board
-                            squares={this.state.squares}
-                            selected={this.state.selected}
-                            locked={this.state.locked}
-                            center_values={this.state.center_values}
-                            corner_values={this.state.corner_values}
-                            color_values={this.state.color_values}
-                            conflicts={this.state.conflicts}
-                            changeSelectedTile={(line, column) => this.changeSelectedTile(line, column)} />
-
-                        <ButtonField
-                            number_annotation={!(this.state.key_annotation === annotationType.NUMBER && this.state.button_annotation === annotationType.COLOR)}
-                            numberBehaviour={(number) => this.applyAction(number)}
-                            colorBehaviour={(number) => this.colorMeSoftly(number)}
-                            setButtonAnnotation={(annotationType) => this.setButtonAnnotation(annotationType)}
-                            key_annotation={this.state.key_annotation}
-                            button_annotation={this.state.button_annotation}
-                            checkSolution={() => this.checkSolution()}
-                            clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
-                        />
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    colorMeSoftly(number) {
+    colorSelectedSquares(number) {
         let color_values = this.state.color_values.slice();
         for(let i = 0;i < 9;  i++){
             for(let j=0; j<9; j++){
@@ -231,12 +229,19 @@ class Game extends React.Component {
     }
 
 
-    setButtonAnnotation(newAnnotationType) {
-
-        if (this.state.button_annotation === newAnnotationType) {
-            this.setState({ button_annotation: annotationType.NUMBER });
-        } else {
-            this.setState({ button_annotation: newAnnotationType });
+    changeAction(newAnnotationType) {
+        if(this.state.previous_action == null){
+            if (this.state.current_action === newAnnotationType) {
+                this.setState({ current_action: annotationType.NUMBER });
+            } else {
+                this.setState({ current_action: newAnnotationType });
+            }
+        } else{
+            if (this.state.previous_action === newAnnotationType) {
+                this.setState({ previous_action: annotationType.NUMBER });
+            } else {
+                this.setState({ previous_action: newAnnotationType });
+            }
         }
     }
 

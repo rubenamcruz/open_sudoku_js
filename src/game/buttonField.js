@@ -19,31 +19,27 @@ class ButtonField extends React.Component {
             <div className="button-grid">
                 <div style={{display: "inline-block"}}>
                     <AnnotationButton name={"number"}
-                        onClick={() => this.props.setButtonAnnotation(annotationType.NUMBER)}
-                        key_annotation={this.props.key_annotation}
-                        button_annotation={this.props.button_annotation} />
+                        onClick={() => this.props.changeAction(annotationType.NUMBER)}
+                        currentAction={this.props.currentAction}/>
                     <div>
                         <AnnotationButton name={"center"}
-                            onClick={() => this.props.setButtonAnnotation(annotationType.CENTER)}
-                            key_annotation={this.props.key_annotation}
-                            button_annotation={this.props.button_annotation} />
+                            onClick={() => this.props.changeAction(annotationType.CENTER)}
+                            currentAction={this.props.currentAction} />
                     </div>
                     <div>
                         <AnnotationButton name={"corner"}
-                            onClick={() => this.props.setButtonAnnotation(annotationType.CORNER)}
-                            key_annotation={this.props.key_annotation}
-                            button_annotation={this.props.button_annotation} />
+                            onClick={() => this.props.changeAction(annotationType.CORNER)}
+                            currentAction={this.props.currentAction} />
                     </div>
                     <div>
                         <AnnotationButton name={"color"}
-                            onClick={() => this.props.setButtonAnnotation(annotationType.COLOR)}
-                            key_annotation={this.props.key_annotation}
-                            button_annotation={this.props.button_annotation} />
+                            onClick={() => this.props.changeAction(annotationType.COLOR)}
+                            currentAction={this.props.currentAction} />
                     </div>
                 </div>
                 <div style={{display: "inline-block"}}>
                     {inputGrid}
-                    <ActionButton name='delete' onClick={() => console.log("delete")} extraClass="wide" />
+                    <ActionButton name='delete' onClick={() => this.props.deleteBehaviour()} extraClass="wide" />
                 </div>
                 <div style={{display: "block"}}>
                     <div>

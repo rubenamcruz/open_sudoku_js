@@ -15,13 +15,7 @@ class AnnotationButton extends React.Component{
 
     getButtonClass(button_type){
         let baseClass = "standard-button regular button-color "
-        if(annotationText[0] === button_type){
-            if(this.props.key_annotation === annotationType.NUMBER && this.props.button_annotation === annotationType.NUMBER){
-                baseClass += "selected";
-            }
-        }
-        else if ((this.props.key_annotation === annotationType.NUMBER && annotationText[this.props.button_annotation] === button_type) ||
-            annotationText[this.props.key_annotation] === button_type){
+        if(annotationText[this.props.currentAction] === button_type){
             baseClass += "selected";
         }
         return baseClass;
