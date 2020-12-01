@@ -36,7 +36,6 @@
 }
 
 .selected {
-  box-shadow: ;
   background-color: powderblue;
 }
 
@@ -52,6 +51,10 @@
   border-radius: 10px;
 
   margin: 3px 3px;
+}
+
+.warning {
+  background-color: rgb(219, 15, 15);
 }
 
 @media screen and (max-width: 1300px) {

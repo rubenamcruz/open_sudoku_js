@@ -14,13 +14,17 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         // todo: history over squares values; no history for selected squares; separate history for a single anotation
+        this.state = this.setInitialValues();
+    }
+
+    setInitialValues(){
         let squares = null;
         let locked = null;
         let center_values = null;
         let corner_values = null;
         let color_values = null;
         let conflicts = null;
-        let puzzle = this.props.puzzle;
+        let puzzle = this.props.puzzle.map(x => x.slice());
         let selected = this.emptyBooleanGrid();
         if (puzzle != null) {
             squares = puzzle;
@@ -45,7 +49,7 @@ class Game extends React.Component {
                 color_values[i] = Array(9).fill(1);
             }
         }
-        this.state = {
+        return {
             squares: squares,
             locked: locked,
             selected: selected,
@@ -59,6 +63,7 @@ class Game extends React.Component {
             multipleSquareSelection: false
         };
     }
+
 
     emptyValues() {
         return { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false };
@@ -99,6 +104,7 @@ class Game extends React.Component {
                             currentAction={this.state.current_action}
                             checkSolution={() => this.checkSolution()}
                             clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
+                            restartGame={() => this.restartGame()}
                         />
                     </div>
                 </div>
@@ -279,6 +285,9 @@ class Game extends React.Component {
         return true;
     }
 
+    restartGame(){
+        this.setState(this.setInitialValues());
+    }
 
 }
 
