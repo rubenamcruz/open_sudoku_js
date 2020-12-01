@@ -4,7 +4,10 @@ import ButtonField from '../game/buttonField.js';
 import NavBar from '../game/navbar.js';
 import { annotationType, annotationText, colorMap } from '../utils/annotations';
 import global_verifier from '../utils/sudoku_verifier.js';
-import {column_rule, line_rule, square_rule} from '../utils/rules/basic_rules.js';
+import { column_rule, line_rule, square_rule } from '../utils/rules/basic_rules.js';
+
+
+
 
 class Game extends React.Component {
 
@@ -17,14 +20,15 @@ class Game extends React.Component {
         let corner_values = null;
         let color_values = null;
         let conflicts = null;
+        let puzzle = this.props.puzzle;
         let selected = this.emptyBooleanGrid();
-        if (this.props.puzzle != null) {
-            squares = this.props.puzzle;
-            locked = this.props.puzzle.map(x => x.map(y => y != null));
-            conflicts = this.props.puzzle.map(x => x.map(y => false));
-            center_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
-            corner_values = this.props.puzzle.map(x => x.map(y => this.emptyValues()));
-            color_values = this.props.puzzle.map(x => x.map(y => 1));
+        if (puzzle != null) {
+            squares = puzzle;
+            locked = puzzle.map(x => x.map(y => y != null));
+            conflicts = puzzle.map(x => x.map(y => false));
+            center_values = puzzle.map(x => x.map(y => this.emptyValues()));
+            corner_values = puzzle.map(x => x.map(y => this.emptyValues()));
+            color_values = puzzle.map(x => x.map(y => 1));
         } else {
             squares = Array(9).fill(null);
             locked = Array(9).fill(null);
@@ -121,17 +125,17 @@ class Game extends React.Component {
 
     removeKeyBasedAnnotation(event) {
         let current_action = this.state.previous_action;
-        if (event.key === "Control"){
-            this.setState({ current_action: current_action, previous_action: null,  multipleSquareSelection: false });
+        if (event.key === "Control") {
+            this.setState({ current_action: current_action, previous_action: null, multipleSquareSelection: false });
 
-        } 
-        if(event.key === "Shift") {
+        }
+        if (event.key === "Shift") {
             this.setState({ current_action: current_action, previous_action: null });
         }
     }
-    
+
     selectNewSquare(line, column) {
-        let selectedSquares = this.state.multipleSquareSelection ? this.state.selected.slice(): this.emptyBooleanGrid();
+        let selectedSquares = this.state.multipleSquareSelection ? this.state.selected.slice() : this.emptyBooleanGrid();
         selectedSquares[line][column] = !selectedSquares[line][column];
         this.setState({ selected: selectedSquares });
     }
@@ -140,42 +144,42 @@ class Game extends React.Component {
 
     updateValues(key) {
         let squares = this.state.squares.slice();
-        for(let i = 0; i < 9; i++){
-            for(let j = 0; j < 9; j++){
-                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
                     if (key >= 1 && key <= 9) {
                         squares[i][j] = Number(key);
                     }
                 }
-            }    
+            }
         }
         this.setState({ squares: squares });
     }
 
     updateCenter(key) {
         let center_values = this.state.center_values.slice();
-        for(let i = 0; i < 9; i++){
-            for(let j = 0; j < 9; j++){
-                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
                     if (key >= 1 && key <= 9) {
                         center_values[i][j][Number(key)] = !center_values[i][j][Number(key)];
                     }
                 }
-            }    
+            }
         }
         this.setState({ center_values: center_values });
     }
 
     updateCorner(key) {
         let corner_values = this.state.corner_values.slice();
-        for(let i = 0; i < 9; i++){
-            for(let j = 0; j < 9; j++){
-                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
                     if (key >= 1 && key <= 9) {
                         corner_values[i][j][Number(key)] = !corner_values[i][j][Number(key)];
                     }
                 }
-            }    
+            }
         }
         this.setState({ corner_values: corner_values });
     }
@@ -184,10 +188,10 @@ class Game extends React.Component {
         let squares = this.state.squares.slice();
         let corner_values = this.state.corner_values.slice();
         let center_values = this.state.center_values.slice();
-            
-        for(let i = 0; i < 9; i++){
-            for(let j = 0; j < 9; j++){
-                if(this.state.selected[i][j] && !this.state.locked[i][j]){
+
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
                     if (squares[i][j]) {
                         squares[i][j] = null;
                     } else {
@@ -195,18 +199,18 @@ class Game extends React.Component {
                         center_values[i][j] = this.emptyValues();
                     }
                 }
-            }    
+            }
         }
         this.setState({ squares: squares, corner_values: corner_values, center_values: center_values });
     }
 
 
-    
+
     applyAction(number) {
-        if (this.state.current_action === annotationType.CENTER){
+        if (this.state.current_action === annotationType.CENTER) {
             this.updateCenter(number);
         }
-        else if (this.state.current_action === annotationType.CORNER ) {
+        else if (this.state.current_action === annotationType.CORNER) {
             this.updateCorner(number);
         }
         else {
@@ -218,9 +222,9 @@ class Game extends React.Component {
 
     colorSelectedSquares(number) {
         let color_values = this.state.color_values.slice();
-        for(let i = 0;i < 9;  i++){
-            for(let j=0; j<9; j++){
-                if(this.state.selected[i][j]){
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (this.state.selected[i][j]) {
                     color_values[i][j] = number;
                 }
             }
@@ -230,13 +234,13 @@ class Game extends React.Component {
 
 
     changeAction(newAnnotationType) {
-        if(this.state.previous_action == null){
+        if (this.state.previous_action == null) {
             if (this.state.current_action === newAnnotationType) {
                 this.setState({ current_action: annotationType.NUMBER });
             } else {
                 this.setState({ current_action: newAnnotationType });
             }
-        } else{
+        } else {
             if (this.state.previous_action === newAnnotationType) {
                 this.setState({ previous_action: annotationType.NUMBER });
             } else {
@@ -248,10 +252,10 @@ class Game extends React.Component {
     checkSolution() {
         let results = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
         if (results.length === 0) {
-            if(this.checkIfThereIsNoNullValues()){
-                this.setState({finished: true});
+            if (this.checkIfThereIsNoNullValues()) {
+                this.setState({ finished: true });
                 alert("Good Job!");
-            }else{
+            } else {
                 alert("Sounds all right so far!");
             }
         } else {
@@ -264,10 +268,10 @@ class Game extends React.Component {
         }
     }
 
-    checkIfThereIsNoNullValues(){
-        for(let line of this.state.squares){
-            for(let elem of line){
-                if(elem == null){
+    checkIfThereIsNoNullValues() {
+        for (let line of this.state.squares) {
+            for (let elem of line) {
+                if (elem == null) {
                     return false;
                 }
             }

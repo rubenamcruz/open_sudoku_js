@@ -5,24 +5,37 @@ import './css/squares.css';
 import './css/buttons.css';
 import './css/navbar.css';
 import './css/clock.css';
-import Game from './views/game.js';
+import GameWrapper from './views/gameWrapper.js';
+import GameList from './views/gamelist.js';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+
+
+
 
 
 class Page extends React.Component {
-    
+
+
 
     render() {
       return (
-          <Game puzzle={[[null,1, 6, null, null, null, 4, 3, 8], 
-                            [3, 4, null, null, 9, 6, 2, null, null],
-                            [8, null, null, null, null, null, 5, 6, null],
-                            [1, null, null, null, 5, 3, null, null, null],
-                            [5, null, 7, null, null, null, 3, null, 1],
-                            [null, null, null, 6, 1, null, null, null, 5],
-                            [null, 9, 1, null, null, null, null, null, 3],
-                            [null, null, 3, 2, 8, null, null, 9, 4],
-                            [7, 2, 8, null, null, null, 1, 5, null]]} />
-      );
+        <Router>
+          <Switch>
+              <Route exact path="/">
+                <GameList/>
+              </Route>
+    
+              <Route path="/game">
+                <GameWrapper />
+              </Route>
+          </Switch>
+        </Router>
+      )
     }
   }
 
