@@ -118,8 +118,8 @@ class Game extends React.Component {
         if (event.key === 'Delete') {
             this.deleteSquareValueOrAnnotations();
         }
-        else if(event.keyCode -48 > 0 && event.keyCode -48 < 10){
-            this.applyAction(event.keyCode - 48);
+        else if(parseInt(event.key) > 0 && parseInt(event.key) < 10){
+            this.applyAction(event.key);
         }
     }
 
