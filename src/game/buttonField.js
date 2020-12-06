@@ -61,10 +61,10 @@ class ButtonField extends React.Component {
                         <div style={{ display: "block" }}>
                             <div>
                                 <ActionButton name={"undo"}
-                                    onClick={() => console.log("undo")}
+                                    onClick={() => this.props.undoBehaviour()}
                                     extraClass="half-full-width" />
                                 <ActionButton name={"redo"}
-                                    onClick={() => console.log("redo")}
+                                    onClick={() => this.props.redoBehaviour()}
                                     extraClass="half-full-width" />
                             </div>
                             <div>

@@ -14,6 +14,7 @@ class Game extends React.Component {
         // todo: history over squares values; no history for selected squares; separate history for a single anotation
         this.state = {
             history: [initializeGame(this.props.puzzle)],
+            future: [],
             previous_action: null,
             current_action: annotationType.NUMBER,
             finished: false,
@@ -23,7 +24,8 @@ class Game extends React.Component {
     }
 
     restartGame(){
-        this.setState(initializeGame(this.props.puzzle));
+        this.setState({ history: [initializeGame(this.props.puzzle)]});
+        this.setState({future: []});
     }
     
     emptyValues() {
@@ -48,7 +50,23 @@ class Game extends React.Component {
 
     updateCurrentState(newState){
         let newHistory = this.state.history.concat(newState)
-        this.setState({history : newHistory });
+        this.setState({history : newHistory, future: [] });
+    }
+
+    undoBehaviour() {
+        if (this.state.history.length > 1) {
+            let newHistory = deepCopyOfObjectOrArray(this.state.history);
+            let newFuture = this.state.future.concat(newHistory.pop());
+            this.setState({ history: newHistory, future: newFuture });
+        }
+    }
+
+    redoBehaviour() {
+        if (this.state.future.length > 0) {
+            let newFuture = deepCopyOfObjectOrArray(this.state.future);
+            let newHistory = this.state.history.concat(newFuture.pop());
+            this.setState({ history: newHistory, future: newFuture });
+        }
     }
 
     render() {
@@ -77,8 +95,10 @@ class Game extends React.Component {
                             changeAction={(annotationType) => this.changeAction(annotationType)}
                             currentAction={this.state.current_action}
                             checkSolution={() => this.checkSolution()}
-                            clearConflicts={() => this.setState({ conflicts: this.emptyBooleanGrid() })}
+                            clearConflicts={() => this.clearConflicts()}
                             restartGame={() => this.restartGame()}
+                            undoBehaviour={() => this.undoBehaviour()}
+                            redoBehaviour={() => this.redoBehaviour()}
                         />
                     </div>
                 </div>
@@ -98,7 +118,7 @@ class Game extends React.Component {
         if (event.key === 'Delete') {
             this.deleteSquareValueOrAnnotations();
         }
-        else {
+        else if(event.keyCode -48 > 0 && event.keyCode -48 < 10){
             this.applyAction(event.keyCode - 48);
         }
     }
@@ -170,8 +190,8 @@ class Game extends React.Component {
     deleteSquareValueOrAnnotations() {
         let stateCopy = this.getCopyOfBoardState();
         let squares = stateCopy.squares;
-        let corner_values = stateCopy.state.corner_values;
-        let center_values = stateCopy.state.center_values;
+        let corner_values = stateCopy.corner_values;
+        let center_values = stateCopy.center_values;
 
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
@@ -235,7 +255,7 @@ class Game extends React.Component {
     }
 
     checkSolution() {
-        let results = global_verifier(this.state.squares, [column_rule, line_rule, square_rule]);
+        let results = global_verifier(this.getCurrentBoardState().squares, [column_rule, line_rule, square_rule]);
         if (results.length === 0) {
             if (this.checkIfThereIsNoNullValues()) {
                 this.setState({ finished: true });
@@ -267,6 +287,11 @@ class Game extends React.Component {
         return true;
     }
 
+    clearConflicts(){
+        let state = this.getCopyOfBoardState();
+        state.conflicts = this.emptyBooleanGrid();
+        this.updateCurrentState(state);
+    }
     
 
 }
