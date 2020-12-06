@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+//todo: fix spacing so that every number fits the square
 class CenterSquare extends React.Component{
     render() {
         return (

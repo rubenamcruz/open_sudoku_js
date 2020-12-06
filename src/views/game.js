@@ -5,66 +5,27 @@ import NavBar from '../game/navbar.js';
 import { annotationType, annotationText, colorMap } from '../utils/annotations';
 import global_verifier from '../utils/sudoku_verifier.js';
 import { column_rule, line_rule, square_rule } from '../utils/rules/basic_rules.js';
-
-
-
+import {initializeGame, deepCopyOfObjectOrArray} from '../states/squareState.js'
 
 class Game extends React.Component {
 
     constructor(props) {
         super(props);
         // todo: history over squares values; no history for selected squares; separate history for a single anotation
-        this.state = this.setInitialValues();
-    }
-
-    setInitialValues(){
-        let squares = null;
-        let locked = null;
-        let center_values = null;
-        let corner_values = null;
-        let color_values = null;
-        let conflicts = null;
-        let puzzle = this.props.puzzle.map(x => x.slice());
-        let selected = this.emptyBooleanGrid();
-        if (puzzle != null) {
-            squares = puzzle;
-            locked = puzzle.map(x => x.map(y => y != null));
-            conflicts = puzzle.map(x => x.map(y => false));
-            center_values = puzzle.map(x => x.map(y => this.emptyValues()));
-            corner_values = puzzle.map(x => x.map(y => this.emptyValues()));
-            color_values = puzzle.map(x => x.map(y => 1));
-        } else {
-            squares = Array(9).fill(null);
-            locked = Array(9).fill(null);
-            center_values = Array(9).fill(null);
-            corner_values = Array(9).fill(null);
-            color_values = Array(9).fill(null);
-            conflicts = Array(9).fill(null);
-            for (let i = 0; i < 9; i++) {
-                squares[i] = Array(9).fill(null);
-                locked[i] = Array(9).fill(false);
-                conflicts[i] = Array(9).fill(false);
-                center_values[i] = Array(9).fill(this.emptyValues());
-                corner_values[i] = Array(9).fill(this.emptyValues());
-                color_values[i] = Array(9).fill(1);
-            }
-        }
-        return {
-            squares: squares,
-            locked: locked,
-            selected: selected,
-            center_values: center_values,
-            corner_values: corner_values,
-            color_values: color_values,
-            conflicts: conflicts,
+        this.state = {
+            history: [initializeGame(this.props.puzzle)],
             previous_action: null,
             current_action: annotationType.NUMBER,
             finished: false,
-            multipleSquareSelection: false
-        };
+            multipleSquareSelection: false,
+            selected: this.emptyBooleanGrid()
+        }
     }
 
-
+    restartGame(){
+        this.setState(initializeGame(this.props.puzzle));
+    }
+    
     emptyValues() {
         return { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false, 8: false, 9: false };
     }
@@ -77,6 +38,19 @@ class Game extends React.Component {
         return value;
     }
 
+    getCurrentBoardState(){
+        return this.state.history[this.state.history.length -1];
+    }
+
+    getCopyOfBoardState(){
+        return deepCopyOfObjectOrArray(this.state.history[this.state.history.length -1]);
+    }
+
+    updateCurrentState(newState){
+        let newHistory = this.state.history.concat(newState)
+        this.setState({history : newHistory });
+    }
+
     render() {
         return (
             <div>
@@ -86,13 +60,13 @@ class Game extends React.Component {
                         onKeyUp={(event) => { this.removeKeyBasedAnnotation(event) }} className="game-div">
 
                         <Board
-                            squares={this.state.squares}
+                            squares={this.getCurrentBoardState().squares}
                             selected={this.state.selected}
-                            locked={this.state.locked}
-                            center_values={this.state.center_values}
-                            corner_values={this.state.corner_values}
-                            color_values={this.state.color_values}
-                            conflicts={this.state.conflicts}
+                            locked={this.getCurrentBoardState().locked}
+                            center_values={this.getCurrentBoardState().center_values}
+                            corner_values={this.getCurrentBoardState().corner_values}
+                            color_values={this.getCurrentBoardState().color_values}
+                            conflicts={this.getCurrentBoardState().conflicts}
                             changeSelectedTile={(line, column) => this.selectNewSquare(line, column)} />
 
                         <ButtonField
@@ -141,7 +115,7 @@ class Game extends React.Component {
     }
 
     selectNewSquare(line, column) {
-        let selectedSquares = this.state.multipleSquareSelection ? this.state.selected.slice() : this.emptyBooleanGrid();
+        let selectedSquares = this.state.multipleSquareSelection ? this.state.selected.map(row => row.slice()) : this.emptyBooleanGrid();
         selectedSquares[line][column] = !selectedSquares[line][column];
         this.setState({ selected: selectedSquares });
     }
@@ -149,55 +123,59 @@ class Game extends React.Component {
 
 
     updateValues(key) {
-        let squares = this.state.squares.slice();
+        let stateCopy = this.getCopyOfBoardState();
+        let squares = stateCopy.squares;
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
-                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
+                if (this.state.selected[i][j] && !stateCopy.locked[i][j]) {
                     if (key >= 1 && key <= 9) {
                         squares[i][j] = Number(key);
                     }
                 }
             }
         }
-        this.setState({ squares: squares });
+        this.updateCurrentState(stateCopy);
     }
 
     updateCenter(key) {
-        let center_values = this.state.center_values.slice();
+        let stateCopy = this.getCopyOfBoardState();
+        let center_values = stateCopy.center_values;
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
-                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
+                if (this.state.selected[i][j] && !stateCopy.locked[i][j]) {
                     if (key >= 1 && key <= 9) {
                         center_values[i][j][Number(key)] = !center_values[i][j][Number(key)];
                     }
                 }
             }
         }
-        this.setState({ center_values: center_values });
+        this.updateCurrentState(stateCopy);
     }
 
     updateCorner(key) {
-        let corner_values = this.state.corner_values.slice();
+        let stateCopy = this.getCopyOfBoardState();
+        let corner_values = stateCopy.corner_values;
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
-                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
+                if (this.state.selected[i][j] && !stateCopy.locked[i][j]) {
                     if (key >= 1 && key <= 9) {
                         corner_values[i][j][Number(key)] = !corner_values[i][j][Number(key)];
                     }
                 }
             }
         }
-        this.setState({ corner_values: corner_values });
+        this.updateCurrentState(stateCopy);
     }
 
     deleteSquareValueOrAnnotations() {
-        let squares = this.state.squares.slice();
-        let corner_values = this.state.corner_values.slice();
-        let center_values = this.state.center_values.slice();
+        let stateCopy = this.getCopyOfBoardState();
+        let squares = stateCopy.squares;
+        let corner_values = stateCopy.state.corner_values;
+        let center_values = stateCopy.state.center_values;
 
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
-                if (this.state.selected[i][j] && !this.state.locked[i][j]) {
+                if (this.state.selected[i][j] && !stateCopy.locked[i][j]) {
                     if (squares[i][j]) {
                         squares[i][j] = null;
                     } else {
@@ -207,7 +185,7 @@ class Game extends React.Component {
                 }
             }
         }
-        this.setState({ squares: squares, corner_values: corner_values, center_values: center_values });
+        this.updateCurrentState(stateCopy);
     }
 
 
@@ -227,7 +205,8 @@ class Game extends React.Component {
 
 
     colorSelectedSquares(number) {
-        let color_values = this.state.color_values.slice();
+        let stateCopy = this.getCopyOfBoardState();
+        let color_values = stateCopy.color_values;
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 if (this.state.selected[i][j]) {
@@ -235,7 +214,7 @@ class Game extends React.Component {
                 }
             }
         }
-        this.setState({ color_values: color_values });
+        this.updateCurrentState(stateCopy);
     }
 
 
@@ -265,11 +244,14 @@ class Game extends React.Component {
                 alert("Sounds all right so far!");
             }
         } else {
+            let stateCopy = this.getCopyOfBoardState();
+            
             let conflicts = this.emptyBooleanGrid();
             for (let result of results) {
                 conflicts[result.line][result.column] = true;
             }
-            this.setState({ conflicts: conflicts });
+            stateCopy.conflicts = conflicts;
+            this.updateCurrentState(stateCopy);
             alert("There are conflicts");
         }
     }
@@ -285,9 +267,7 @@ class Game extends React.Component {
         return true;
     }
 
-    restartGame(){
-        this.setState(this.setInitialValues());
-    }
+    
 
 }
 
