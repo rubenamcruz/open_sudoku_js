@@ -1,9 +1,16 @@
 import _ from 'lodash';
 
 export function initializeGame(initial_values) {
-    let puzzle = initial_values == null ? emptyMatrix() : initial_values.map(x => x.slice());
+    let puzzle = null;
+    console.log("initial_values: " +initial_values);
+    if(initial_values == null) {
+        puzzle = emptyMatrix();
+    } else{
+        puzzle = initial_values.map(x => x.slice());
+    }
 
     let squares = puzzle;
+    console.log(squares);
     let locked = puzzle.map(x => x.map(y => y != null));
     let conflicts = puzzle.map(x => x.map(y => false));
     let center_values = puzzle.map(x => x.map(y => emptyValues()));

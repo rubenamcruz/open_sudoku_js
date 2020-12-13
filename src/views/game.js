@@ -6,6 +6,8 @@ import { annotationType, annotationText, colorMap } from '../utils/annotations';
 import global_verifier from '../utils/sudoku_verifier.js';
 import { column_rule, line_rule, square_rule } from '../utils/rules/basic_rules.js';
 import {initializeGame, deepCopyOfObjectOrArray} from '../states/squareState.js'
+import {getSudokuById} from "../data/sudokuDataAccesser.js";
+import { parsePuzzle} from "../utils/sudokuParser";
 
 class Game extends React.Component {
 
@@ -13,7 +15,7 @@ class Game extends React.Component {
         super(props);
         // todo: history over squares values; no history for selected squares; separate history for a single anotation
         this.state = {
-            history: [initializeGame(this.props.puzzle)],
+            history: [initializeGame(null)],
             future: [],
             previous_action: null,
             current_action: annotationType.NUMBER,
@@ -21,10 +23,18 @@ class Game extends React.Component {
             multipleSquareSelection: false,
             selected: this.emptyBooleanGrid()
         }
+        this.sudoku = null;
+    }
+
+    async componentDidMount(){
+        let raw_sudoku = await getSudokuById(this.props.sudokuId);
+
+        this.sudoku = parsePuzzle(raw_sudoku.puzzle);
+        this.setState({history: [initializeGame(this.sudoku)]} );
     }
 
     restartGame(){
-        this.setState({ history: [initializeGame(this.props.puzzle)]});
+        this.setState({ history: [initializeGame(this.sudoku)]});
         this.setState({future: []});
     }
     
@@ -277,7 +287,7 @@ class Game extends React.Component {
     }
 
     checkIfThereIsNoNullValues() {
-        for (let line of this.state.squares) {
+        for (let line of this.getCurrentBoardState().squares) {
             for (let elem of line) {
                 if (elem == null) {
                     return false;

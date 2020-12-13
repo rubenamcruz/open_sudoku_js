@@ -5,14 +5,14 @@ import './css/squares.css';
 import './css/buttons.css';
 import './css/navbar.css';
 import './css/clock.css';
-import GameWrapper from './views/gameWrapper.js';
-import GameList from './views/gamelist.js';
+import GameController from './controllers/gameController.js';
 
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
+import GameListController from './controllers/gameListController.js';
 
 
 
@@ -27,11 +27,11 @@ class Page extends React.Component {
         <Router>
           <Switch>
               <Route exact path="/">
-                <GameList/>
+                <GameListController/>
               </Route>
     
               <Route path="/game">
-                <GameWrapper />
+                <GameController />
               </Route>
           </Switch>
         </Router>
