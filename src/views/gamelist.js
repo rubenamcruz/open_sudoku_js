@@ -1,5 +1,4 @@
 import React from 'react';
-import Games from '../games/games.json';
 import {Link} from "react-router-dom";
 import {getSudokuList} from '../data/sudokuDataAccesser.js'; 
 
@@ -10,9 +9,13 @@ class GameList extends React.Component {
         this.state = {data: []};
     }
 
-    async componentDidMount(){
-        let sudokus = await getSudokuList();
-        this.setState({data: sudokus} );
+    componentDidMount(){
+        getSudokuList().then((sudokus) => { 
+            console.log(sudokus); 
+            this.setState({data: sudokus})
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     render(){

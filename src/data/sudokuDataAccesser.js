@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 
-const url = "http://localhost:3001/";
+const url = process.env.REACT_APP_API_URL;
 const sudokuListEndpoint = "sudoku/list";
 const sudokuDetailsEndpoint = "sudoku/";
 
