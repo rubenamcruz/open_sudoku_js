@@ -6,11 +6,20 @@ import {annotationType, annotationText} from '../utils/annotations';
 class ActionButton extends React.Component{
 
     render(){
-        return (
-            <button className={this.getButtonClass()} onClick={this.props.onClick} title={this.props.title ? this.props.title : ""}>
-                    {this.props.name}
-                </button>
-        )
+         if(this.props.id){
+            return (
+                <button id={this.props.id} className={this.getButtonClass()} onClick={this.props.onClick} title={this.props.title ? this.props.title : ""}>
+                        {this.props.name}
+                    </button>
+            )
+         }else{
+            return (
+                <button className={this.getButtonClass()} onClick={this.props.onClick} title={this.props.title ? this.props.title : ""}>
+                        {this.props.name}
+                    </button>
+            )
+         }
+        
     }
 
     getButtonClass(){

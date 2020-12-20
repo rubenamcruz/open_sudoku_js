@@ -57,6 +57,10 @@
   background-color: rgb(219, 15, 15);
 }
 
+.small_letters{
+  font-size: 13px;
+}
+
 @media screen and (max-width: 1300px) {
   .half-full-width {
     width: 97%;

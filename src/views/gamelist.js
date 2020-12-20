@@ -11,7 +11,6 @@ class GameList extends React.Component {
 
     componentDidMount(){
         getSudokuList().then((sudokus) => { 
-            console.log(sudokus); 
             this.setState({data: sudokus})
         }).catch((error) => {
             console.log(error);

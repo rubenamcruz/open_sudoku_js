@@ -11,13 +11,13 @@ class ButtonField extends React.Component {
         super(props);
         this.state = { restart: false };
 
-        this.restartButton = <ActionButton name={"restart"}
+        this.restartButton = <ActionButton id={"restart"} name={"restart"}
             onClick={() => this.switchRestartWithConfirmationButton()}
             extraClass="wide" />;
 
-        this.confirmRestartButton = <ActionButton name={"Are you sure?"}
-            onClick={() => {this.props.restartGame(); this.setRestartButton()}}
-            extraClass="wide warning" />;
+        this.confirmRestartButton = <ActionButton id={"confirm"}  name={"Are you sure?"}
+            onClick={() => {this.props.restartGame()}}
+            extraClass="wide warning small_letters" />;
     }
 
     render() {
@@ -32,8 +32,7 @@ class ButtonField extends React.Component {
 
         return (
             <div className="button-div">
-                <div className="button-grid">
-                    <div onClick={() => this.setRestartButton()}>
+                <div className="button-grid" onClick={(e) => this.setRestartButton(e)}>
                         <div style={{ display: "inline-block" }}>
                             <AnnotationButton name={"number"}
                                 onClick={() => this.props.changeAction(annotationType.NUMBER)}
@@ -76,23 +75,27 @@ class ButtonField extends React.Component {
                                     title="Clear conflict annotation"
                                     extraClass="half-full-width" />
                             </div>
-                        </div>
-                    </div>
 
-                    <div>
+                    <div >
                         {restart}
                     </div>
+                        </div>
+
                 </div>
             </div>
         )
     }
 
+    
+
     switchRestartWithConfirmationButton() {
         this.setState({ restart: true });
     }
 
-    setRestartButton() {
-        this.setState({ restart: false });
+    setRestartButton(event) {
+        if(!event || event.target.id !== "restart" ){
+            this.setState({ restart: false });
+        }
     }
 }
 
