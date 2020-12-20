@@ -1,14 +1,10 @@
 .square {
     background: #fff;
-    border: 1px solid #000;
     float: left;
     font-size: 24px;
     font-weight: bold;
     line-height: 59px;
     height: 59px;
-    margin-right: -1px;
-    margin-top: -1px;
-    padding: 0;
     text-align: center;
     width: 59px;
 }
@@ -19,9 +15,6 @@
   font-weight: normal;
   line-height: 59px;
   height: 59px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 1px;
   text-align: center;
   width: 59px;
 }
@@ -33,70 +26,39 @@
   font-weight: normal;
   line-height: 19px;
   height: 19px;
-  margin-right: -1px;
-  margin-top: -1px;
-  padding: 1px;
   text-align: center;
   width: 19px;
   position: absolute;
 }
 
-.square_left_border{
-    border-left: 1px solid #000;
-}
+
   
-  
-.square_right_border{
+.square_right_border_regular{
   border-right: 1px solid #000;
 }
 
 
-.square_top_border{
-  border-top: 1px solid #000;
-}
-
-
-.square_bottom_border{
+.square_bottom_border_regular{
   border-bottom: 1px solid #000;
 }
 
 
-.square_left_bold{
-    border-left: 2px solid #000;
-}
-  
-  
-.square_right_bold{
-  border-right: 2px solid #000;
-}
-
-
-.square_top_bold{
-  border-top: 2px solid #000;
-}
-
-
-.square_bottom_bold{
-  border-bottom: 2px solid #000;
-}
-
-
-.square_left_outer_bold{
+.square_left_border_bold{
     border-left: 3px solid #000;
 }
   
   
-.square_right_outer_bold{
+.square_right_border_bold{
   border-right: 3px solid #000;
 }
 
 
-.square_top_outer_bold{
+.square_top_border_bold{
   border-top: 3px solid #000;
 }
 
 
-.square_bottom_outer_bold{
+.square_bottom_border_bold{
   border-bottom: 3px solid #000;
 }
 
