@@ -1,7 +1,7 @@
 import React from 'react';
 import Board from '../game/board.js';
 import ButtonField from '../game/buttonField.js';
-import NavBar from '../game/navbar.js';
+import GameNavbar from '../navs/gameNavbar.js';
 import { annotationType, annotationText, colorMap } from '../utils/annotations';
 import global_verifier from '../utils/sudoku_verifier.js';
 import { column_rule, line_rule, square_rule } from '../utils/rules/basic_rules.js';
@@ -82,7 +82,7 @@ class Game extends React.Component {
     render() {
         return (
             <div>
-                <NavBar finished={this.state.finished} />
+                <GameNavbar finished={this.state.finished} />
                 <div className="main-area">
                     <div tabIndex={0} onKeyDown={(event) => { event.preventDefault(); this.chooseKeyBasedAction(event) }}
                         onKeyUp={(event) => { this.removeKeyBasedAnnotation(event) }} className="game-div">

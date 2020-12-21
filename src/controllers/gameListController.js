@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-    useLocation
-} from "react-router-dom";
 import GameList from '../views/gamelist.js';
 
 //todo: fix memory leak

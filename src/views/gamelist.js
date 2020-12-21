@@ -1,33 +1,37 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {getSudokuList} from '../data/sudokuDataAccesser.js'; 
+import { Link } from "react-router-dom";
+import { getSudokuList } from '../data/sudokuDataAccesser.js';
+import Navbar from '../navs/navbar.js';
 
 class GameList extends React.Component {
 
-    constructor(){
+    constructor() {
         super();
-        this.state = {data: []};
+        this.state = { data: [], error: null };
     }
 
-    componentDidMount(){
-        getSudokuList().then((sudokus) => { 
-            this.setState({data: sudokus})
+    componentDidMount() {
+        getSudokuList().then((sudokus) => {
+            this.setState({ data: sudokus })
         }).catch((error) => {
+            this.setState({ error: "Could Not Load Game List. Please try again!" });
             console.log(error);
         });
     }
 
-    render(){
+    render() {
         let count = 1;
         let game_list = this.state.data.map(game => {
-            // let puzzle = game.puzzle.toString().split(',').join('');
             let sudoku_id = game.sudoku_id;
             return (<li key={count++} ><Link to={"/game?id=" + sudoku_id}>{game.name}</Link></li>)
         });
-        return(
-            <ul>
-                {game_list}
-            </ul>
+        return (
+            <div>
+                <Navbar children={""} />
+                <ul>
+                    {game_list}
+                </ul>
+            </div>
         )
     }
 }
