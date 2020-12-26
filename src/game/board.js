@@ -19,7 +19,7 @@ class Board extends React.Component {
                 cornerValues={cornerValues}
                 conflicts={conflicts}
                 color={colorValue}
-                onClick={() => this.props.changeSelectedTile(line, column)} />
+                onClick={() => this.props.changeSelectedTile? this.props.changeSelectedTile(line, column): null} />
         )
     }
 

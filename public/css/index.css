@@ -47,6 +47,15 @@ div:focus {outline:0;}
 }
 
 
+.game-preview {
+  display: flex;
+  zoom: 0.8;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  
+}
+
 @media screen and (max-width: 1300px) {
 
   .game-div{

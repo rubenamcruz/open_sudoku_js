@@ -1,23 +1,24 @@
 import React from 'react';
-import { Link } from "react-router-dom";
 import { getSudokuList, organizeSudokuByLevels } from '../data/sudokuDataAccesser.js';
 import Navbar from '../navs/navbar.js';
 import SideNavbar from '../navs/sideNavbar.js';
 import Category from '../navs/items/category.js';
 import Item from '../navs/items/item.js';
+import Board from '../game/board.js';
+import {parsePuzzle} from '../utils/sudokuParser.js';
+import {initializeGame} from '../states/squareState.js';
 
 class GameList extends React.Component {
 
     constructor() {
         super();
-        this.state = { data: [], error: null };
+        this.state = { data: [], error: null, board: null };
     }
 
     componentDidMount() {
         console.log("let me see those puzzles");
         getSudokuList().then((sudokus) => {
             this.setState({ data: sudokus })
-            console.log("They are super easy to me!");
         }).catch((error) => {
             this.setState({ error: "Could Not Load Game List. Please try again!" });
             console.log(error);
@@ -27,12 +28,14 @@ class GameList extends React.Component {
     render() {
         let count = 1;
         let categoriesAndItems = this.processData();
+        let previewBoard = this.state.board;
         return (
             <div>
                 <Navbar children={""} />
-                <div style={{ height: "96vh"}}>
+                <div style={{ height: "96vh", display: "flex"}}>
                     <SideNavbar children={categoriesAndItems} />
-                    <div style={{ display: "inline-block" }}>
+                    <div className={"game-preview"}>
+                        {previewBoard}
                         
                     </div>
                 </div>
@@ -40,8 +43,29 @@ class GameList extends React.Component {
         )
     }
 
+    createOrUpdatePreviewBoard(rawPuzzle){
+        let puzzle = parsePuzzle(rawPuzzle);
+        let game = initializeGame(puzzle);
+        console.log(game);
+        this.setState({board: <Board
+        squares={game.squares}
+        selected={this.emptyBooleanGrid()}
+        locked={game.locked}
+        center_values={game.center_values}
+        corner_values={game.corner_values}
+        color_values={game.color_values}
+        conflicts={game.conflicts}/>})
+    }
+
+    emptyBooleanGrid() {
+        let value = Array(9).fill(null);
+        for (let i = 0; i < 9; i++) {
+            value[i] = Array(9).fill(false);
+        }
+        return value;
+    }
+
     processData(){
-        console.log("Games are: " + this.state.data);
         if(this.state.data.length === 0){
             return "";
         }
@@ -50,10 +74,7 @@ class GameList extends React.Component {
         let level_name = sudokus[0].level;
         let level_id = sudokus[0].level_id;
         let items = [];
-        console.log(sudokus);
         for(let sudoku of sudokus ) {
-            console.log(sudoku);
-            console.log(sudoku.level === level_name);
             if(sudoku.level === level_name){
                 items = items.concat(this.createItem(sudoku));
             }
@@ -68,12 +89,11 @@ class GameList extends React.Component {
         }
         let category = <Category text={level_name} items={items} key={level_id}/>;
         categoriesAndItems = categoriesAndItems.concat(category);
-        console.log(categoriesAndItems);
         return categoriesAndItems;
     }
 
     createItem(sudoku){
-        return  <Item href={"/game?id=" + sudoku.sudoku_id} text={sudoku.name} key={sudoku.id}/>;
+        return  <Item href={"/game?id=" + sudoku.sudoku_id} text={sudoku.name} key={sudoku.id} onClick={() => this.createOrUpdatePreviewBoard(sudoku.puzzle)}/>;
     }
 }
 

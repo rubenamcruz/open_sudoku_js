@@ -9,7 +9,7 @@ class Item extends React.Component {
         let icon = <FontAwesomeIcon style={{ marginRight: "6px" }} icon={faAngleDoubleRight} />
         return (
             <div>
-                <div className="sidenavItem">
+                <div className="sidenavItem" onClick={() => this.props.onClick()}>
                     <div style={{ marginLeft: "6px" }}>
                         <a href={this.props.href}>{this.props.text}</a>
                     </div>
