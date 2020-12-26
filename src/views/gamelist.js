@@ -45,25 +45,9 @@ class GameList extends React.Component {
 
     createOrUpdatePreviewBoard(rawPuzzle){
         let puzzle = parsePuzzle(rawPuzzle);
-        let game = initializeGame(puzzle);
-        console.log(game);
-        this.setState({board: <Board
-        squares={game.squares}
-        selected={this.emptyBooleanGrid()}
-        locked={game.locked}
-        center_values={game.center_values}
-        corner_values={game.corner_values}
-        color_values={game.color_values}
-        conflicts={game.conflicts}/>})
+        this.setState({board: <Board squares={puzzle} />})
     }
 
-    emptyBooleanGrid() {
-        let value = Array(9).fill(null);
-        for (let i = 0; i < 9; i++) {
-            value[i] = Array(9).fill(false);
-        }
-        return value;
-    }
 
     processData(){
         if(this.state.data.length === 0){

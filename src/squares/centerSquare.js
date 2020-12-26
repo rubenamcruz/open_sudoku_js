@@ -13,9 +13,11 @@ class CenterSquare extends React.Component{
     centerNumberString(){
         let input_numbers = this.props.values;
         let result_numbers = "";
-        for(let i = 1; i <=9; i++){
-            if(input_numbers[i]){
-                result_numbers += i;
+        if(input_numbers){
+            for(let i = 1; i <=9; i++){
+                if(input_numbers[i]){
+                    result_numbers += i;
+                }
             }
         }
         return result_numbers;
