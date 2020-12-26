@@ -7,12 +7,13 @@ import Item from '../navs/items/item.js';
 import Board from '../game/board.js';
 import {parsePuzzle} from '../utils/sudokuParser.js';
 import {initializeGame} from '../states/squareState.js';
+import ActionButton from '../buttons/actionButton.js';
 
 class GameList extends React.Component {
 
     constructor() {
         super();
-        this.state = { data: [], error: null, board: null };
+        this.state = { data: [], error: null, board: null, gameRef: null };
     }
 
     componentDidMount() {
@@ -26,26 +27,28 @@ class GameList extends React.Component {
     }
 
     render() {
-        let count = 1;
         let categoriesAndItems = this.processData();
         let previewBoard = this.state.board;
+        let gameAccess = this.state.gameRef? <a className={"button-wrapper"} href={this.state.gameRef}><ActionButton extraClass={"widest"} name={"Play me!"}/></a> : null;
         return (
             <div>
                 <Navbar children={""} />
                 <div style={{ height: "96vh", display: "flex"}}>
                     <SideNavbar children={categoriesAndItems} />
                     <div className={"game-preview"}>
-                        {previewBoard}
-                        
+                            <div style={{display: "block"}}>
+                            {previewBoard}
+                            {gameAccess}
+                            </div>
                     </div>
                 </div>
             </div>
         )
     }
 
-    createOrUpdatePreviewBoard(rawPuzzle){
-        let puzzle = parsePuzzle(rawPuzzle);
-        this.setState({board: <Board squares={puzzle} />})
+    createOrUpdatePreviewBoard(sudokuItem){
+        let puzzle = parsePuzzle(sudokuItem.puzzle);
+        this.setState({board: <Board squares={puzzle} />, gameRef: "/game?id=" + sudokuItem.sudoku_id })
     }
 
 
@@ -77,7 +80,7 @@ class GameList extends React.Component {
     }
 
     createItem(sudoku){
-        return  <Item href={"/game?id=" + sudoku.sudoku_id} text={sudoku.name} key={sudoku.id} onClick={() => this.createOrUpdatePreviewBoard(sudoku.puzzle)}/>;
+        return  <Item text={sudoku.name} key={sudoku.id} onClick={() => this.createOrUpdatePreviewBoard(sudoku)}/>;
     }
 }
 

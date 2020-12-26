@@ -51,9 +51,17 @@ div:focus {outline:0;}
   display: flex;
   zoom: 0.8;
   width: 100%;
+  height: 100%;
   align-items: center;
   justify-content: center;
   
+}
+
+.button-wrapper {
+  width: auto;
+  height: fit-content;
+  margin: 10px 50px;
+  display: flex;
 }
 
 @media screen and (max-width: 1300px) {
@@ -76,4 +84,9 @@ div:focus {outline:0;}
   .button-grid{
     display: inherit;
   }
+
+  .button-wrapper {
+    margin: 0;
+  }
 }
+

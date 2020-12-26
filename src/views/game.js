@@ -13,7 +13,6 @@ class Game extends React.Component {
 
     constructor(props) {
         super(props);
-        // todo: history over squares values; no history for selected squares; separate history for a single anotation
         this.state = {
             history: [initializeGame(null)],
             future: [],
