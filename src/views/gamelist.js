@@ -32,8 +32,7 @@ class GameList extends React.Component {
         let gameAccess = this.state.gameRef? <a className={"button-wrapper"} href={this.state.gameRef}><ActionButton extraClass={"widest"} name={"Play me!"}/></a> : null;
         return (
             <div>
-                <Navbar children={""} />
-                <div style={{ height: "96vh", display: "flex"}}>
+                <div style={{ height: "100vh", display: "flex"}}>
                     <SideNavbar children={categoriesAndItems} />
                     <div className={"game-preview"}>
                             <div style={{display: "block"}}>
@@ -61,9 +60,10 @@ class GameList extends React.Component {
         let level_name = sudokus[0].level;
         let level_id = sudokus[0].level_id;
         let items = [];
+        let count = 1;
         for(let sudoku of sudokus ) {
             if(sudoku.level === level_name){
-                items = items.concat(this.createItem(sudoku));
+                items = items.concat(this.createItem(sudoku, count++));
             }
             else{
                 let category = <Category text={level_name} items={items.slice()} key={level_id}/>;
@@ -71,7 +71,7 @@ class GameList extends React.Component {
                 items = [];
                 level_name = sudoku.level;
                 level_id = sudoku.level_id;
-                items = items.concat(this.createItem(sudoku));
+                items = items.concat(this.createItem(sudoku, count++));
             }
         }
         let category = <Category text={level_name} items={items} key={level_id}/>;
@@ -79,8 +79,8 @@ class GameList extends React.Component {
         return categoriesAndItems;
     }
 
-    createItem(sudoku){
-        return  <Item text={sudoku.name} key={sudoku.id} onClick={() => this.createOrUpdatePreviewBoard(sudoku)}/>;
+    createItem(sudoku, number){
+        return  <Item text={number} key={sudoku.id} onClick={() => this.createOrUpdatePreviewBoard(sudoku)}/>;
     }
 }
 
